@@ -47,11 +47,11 @@ const AdminProfileForm = ({ setShowUForm }) => {
     <>
       <div className="fixed inset-0 bg-black/50 flex justify-center items-center transition-transform ease-in-out">
         <div className="md:min-w-md flex flex-col gap-2 items-center justify-center p-3 fixed bg-white rounded shadow-2xl">
-          <div className="flex justify-center items-center w-full ">
+          <div className="flex justify-left items-center w-full ">
             <h1 className="text-xl md:text-3xl font-semibold">
               Edit Admin Profile
             </h1>
-            <div className="absolute flex justify-end items-end w-full pr-2">
+            <div className="absolute flex justify-end items-end w-full pr-5">
               <button
                 className="cursor-pointer"
                 onClick={() => setShowUForm(false)}

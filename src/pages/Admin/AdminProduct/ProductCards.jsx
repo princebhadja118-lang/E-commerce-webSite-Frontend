@@ -109,10 +109,10 @@ const ProductCards = ({
           <div>
             {showEditForm && (
               <div
-                className="fixed inset-0 bg-black/70 flex items-center justify-center "
+                className="fixed inset-0 bg-black/70 flex items-center justify-center p-5 "
                 onClick={(e) => e.stopPropagation()}
               >
-                <div className="bg-white p-6 rounded w-sm flex flex-col gap-3">
+                <div className="bg-white p-3 md:p-6 rounded w-sm flex flex-col gap-3">
                   <div className="flex justify-between items-center">
                     <h2 className="text-xl font-bold">Edit Product</h2>
                     <button
