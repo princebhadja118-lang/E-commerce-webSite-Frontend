@@ -37,7 +37,7 @@ const Products = () => {
             className="relative flex justify-center"
             onClick={() => setShowCard(true)}
           >
-            <button className="cursor-pointer">
+            <button className="cursor-pointer relative">
               <FaCartShopping size={25} md:size={30} />
               <p className="text-sm font-bold absolute -top-3 -right-3 bg-red-500 w-5 h-5 items-center leading-5 text-center rounded-full text-white">
                 {cart.length}

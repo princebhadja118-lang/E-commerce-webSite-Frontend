@@ -2,28 +2,36 @@ import { CardElement, useStripe, useElements } from "@stripe/react-stripe-js";
 import toast from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
 import { clearCart } from "../../../redux/cartSlice";
-import { useState } from "react";
+import { useContext, useState } from "react";
+import { AuthContext } from "../../../auth/AuthContext";
 
-const Checkout = ({ setShowCard, checkForm }) => {
+const Checkout = ({ setShowCard, checkForm, formData }) => {
   const stripe = useStripe();
   const elements = useElements();
-  const cart = useSelector((state) => state.cart.cartItems);
+
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  const cart = useSelector((state) => state.cart.cartItems);
+  const { user } = useContext(AuthContext);
+
   const dispatch = useDispatch();
+
+  const totalAmount = cart.reduce((total, item) => total + item.price, 0);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (!stripe || !elements) return;
 
-    try {
-      const totalAmount = cart.reduce((total, item) => total + item.price, 0);
+    setLoading(true);
 
+    try {
       if (!checkForm()) {
+        setLoading(false);
         return;
       }
 
-      // Backend call
       const res = await fetch("http://localhost:5000/api/payment/method", {
         method: "POST",
         headers: {
@@ -46,16 +54,37 @@ const Checkout = ({ setShowCard, checkForm }) => {
 
       if (result.error) {
         setError(result.error.message);
+        setLoading(false);
         isValid = false;
       } else {
+        setLoading(false);
         toast.success("Payment Successful");
+        const paymentId = result.paymentIntent?.id;
+
+        //store order details
+        await fetch("http://localhost:5000/api/orders/create-order", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            userId: user.id,
+            products: cart,
+            totalAmount: totalAmount,
+            shippingAddress: formData,
+            paymentId: paymentId,
+          }),
+        });
+
         dispatch(clearCart());
+
         setShowCard(false);
-        console.log(result.paymentIntent);
+        setLoading(false);
       }
     } catch (err) {
       console.error(err);
       toast.error("Payment failed");
+      setLoading(false);
     }
   };
 
@@ -68,9 +97,14 @@ const Checkout = ({ setShowCard, checkForm }) => {
 
       <button
         type="submit"
+        disabled={loading}
         className="w-full mt-2 py-2 bg-gray-600 hover:bg-gray-700 flex justify-center items-center font-semibold text-white rounded cursor-pointer"
       >
-        Pay ₹{cart.reduce((total, item) => total + item.price, 0)}
+        {loading ? (
+          <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin "></div>
+        ) : (
+          `Pay ₹${cart.reduce((total, item) => total + item.price, 0)}`
+        )}
       </button>
     </form>
   );

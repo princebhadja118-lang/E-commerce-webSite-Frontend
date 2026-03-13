@@ -1,12 +1,15 @@
 import React, { useContext, useState } from "react";
 import { AuthContext } from "../../auth/AuthContext";
 import logo from "../../assets/rklogo-removebg-preview.png";
+import userIcon from "../../assets/profile.png";
 import Products from "./products/Products";
 import { NavLink } from "react-router-dom";
+import OrdersDetails from "./OrdersDetails";
 
 const Dashboard = () => {
   const { logout, user } = useContext(AuthContext);
   const [menu, setMenu] = useState(false);
+  const [showOrders, setShowOrders] = useState(false);
 
   return (
     <>
@@ -41,10 +44,13 @@ const Dashboard = () => {
               <NavLink>Contact</NavLink>
             </div>
           </div>
-          <div className="md:flex hidden  md:gap-2 items-center shadow py-1 px-2 rounded bg-gray-300 hover:shadow-lg hover:bg-gray-400">
-            <code className="text-xl text-black font-semibold ">
-              {user?.username}
-            </code>
+          <div className="md:flex hidden  md:gap-2 items-center shadow py-1 px-2 rounded bg-gray-400 hover:shadow-lg mx-3 ">
+            <button
+              onClick={() => setShowOrders(true)}
+              className="text-xl text-black font-semibold cursor-pointer rounded-full w-10 h-10"
+            >
+              <img src={userIcon} alt="user Icon" />
+            </button>
             <button
               onClick={logout}
               className="bg-white font-bold text-red-500 px-4 py-2 h-10 rounded cursor-pointer"
@@ -72,9 +78,12 @@ const Dashboard = () => {
                 </div>
               </div>
               <div className="flex flex-col md:flex-row md:gap-3 items-center ">
-                <code className="text-2xl text-black p-2 font-bold ">
-                  {user?.username}
-                </code>
+                <button
+                  onClick={() => setShowOrders(true)}
+                  className="text-xl text-black font-semibold cursor-pointer rounded-full w-10 h-10 my-1"
+                >
+                  <img src={userIcon} alt="user Icon" />
+                </button>
                 <button
                   onClick={logout}
                   className="bg-white font-bold text-red-500 px-4 py-2 h-10 rounded cursor-pointer"
@@ -85,6 +94,7 @@ const Dashboard = () => {
             </div>
           )}
         </div>
+        {showOrders && <OrdersDetails setShowOrders={setShowOrders} />}
         <main className="pt-5">
           <Products />
         </main>

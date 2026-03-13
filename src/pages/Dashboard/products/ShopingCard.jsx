@@ -6,6 +6,10 @@ import Checkout from "./Checkout";
 import { useDispatch, useSelector } from "react-redux";
 import { removeFromCart } from "../../../redux/cartSlice";
 
+const stripePromise = loadStripe(
+  "pk_test_51T9NlOAeER5tBs8aBq48732wCWF3aF13k653f6ygIqc1w2u4As3E4DhRMn2iZdSdckhQHfqNOixc7MysoDfTzTe100LWgXOXEX",
+);
+
 const ShopingCard = ({ setShowCard }) => {
   const [formData, setFormData] = useState({
     name: "",
@@ -32,10 +36,6 @@ const ShopingCard = ({ setShowCard }) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
     setErrors({ ...errors, [e.target.name]: "" });
   };
-
-  const stripePromise = loadStripe(
-    "pk_test_51T9NlOAeER5tBs8aBq48732wCWF3aF13k653f6ygIqc1w2u4As3E4DhRMn2iZdSdckhQHfqNOixc7MysoDfTzTe100LWgXOXEX",
-  );
 
   const dispatch = useDispatch();
   const cart = useSelector((state) => state.cart.cartItems);
@@ -82,7 +82,7 @@ const ShopingCard = ({ setShowCard }) => {
 
   return (
     <div className="fixed inset-0 bg-black/50 w-full h-full flex justify-center items-center p-4 md:p-8">
-      <div className="bg-white w-full md:w-fit p-3 rounded shadow flex flex-col md:flex-row gap-5">
+      <div className="bg-white w-full md:w-fit py-3 pr-3 rounded shadow flex flex-col md:flex-row gap-5">
         <div>
           {cart.length > 0 ? (
             <div className="h-55 md:h-120 overflow-y-scroll p-2 md:w-100 grid grid-cols-1 gap-2">
@@ -127,13 +127,13 @@ const ShopingCard = ({ setShowCard }) => {
           )}
         </div>
         <div className="w-full">
-          <div className="flex justify-between items-center mb-2">
+          <div className="flex justify-between items-center mb-2 w-99">
             <h2 className="text-sm md:text-xl font-bold">Shopping Cart</h2>
             <button
               className="cursor-pointer"
               onClick={() => setShowCard(false)}
             >
-              <IoClose className="text-lg md:text-2xl " />
+              <IoClose className="text-lg md:text-2xl" />
             </button>
           </div>
           {cart.length > 0 ? (
@@ -301,7 +301,11 @@ const ShopingCard = ({ setShowCard }) => {
                   </div>
                 </div>
                 <Elements stripe={stripePromise}>
-                  <Checkout setShowCard={setShowCard} checkForm={checkForm} />
+                  <Checkout
+                    setShowCard={setShowCard}
+                    checkForm={checkForm}
+                    formData={formData}
+                  />
                 </Elements>
               </div>
             </div>
