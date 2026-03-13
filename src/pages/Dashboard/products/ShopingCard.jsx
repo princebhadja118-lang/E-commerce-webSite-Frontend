@@ -81,8 +81,8 @@ const ShopingCard = ({ setShowCard }) => {
   };
 
   return (
-    <div className="fixed inset-0 bg-black/50 w-full h-full flex justify-center items-center p-2">
-      <div className="bg-white p-3 rounded m-2 shadow flex flex-col md:flex-row gap-5">
+    <div className="fixed inset-0 bg-black/50 w-full h-full flex justify-center items-center p-4 md:p-8">
+      <div className="bg-white w-full md:w-fit p-3 rounded shadow flex flex-col md:flex-row gap-5">
         <div>
           {cart.length > 0 ? (
             <div className="h-55 md:h-120 overflow-y-scroll p-2 md:w-100 grid grid-cols-1 gap-2">
@@ -113,7 +113,7 @@ const ShopingCard = ({ setShowCard }) => {
                   <div>
                     <button
                       onClick={() => handleRemove(item._id)}
-                      className="bg-red-600 hover:bg-red-700 px-2 py-1 md:px-4 md:py-2 rounded text-sm md:text-base text-white font-semibold"
+                      className="bg-red-600 hover:bg-red-700 px-2 py-1 md:px-4 md:py-2 rounded text-sm md:text-base text-white font-semibold cursor-pointer"
                     >
                       <span className="hidden md:flex">Remove</span>{" "}
                       <span className="md:hidden">X</span>
@@ -126,13 +126,14 @@ const ShopingCard = ({ setShowCard }) => {
             " "
           )}
         </div>
-        <div>
+        <div className="w-full">
           <div className="flex justify-between items-center mb-2">
-            <h2 className="text-sm md:text-xl font-bold pr-10">
-              Shopping Cart
-            </h2>
-            <button onClick={() => setShowCard(false)}>
-              <IoClose size={20} md:size={25} />
+            <h2 className="text-sm md:text-xl font-bold">Shopping Cart</h2>
+            <button
+              className="cursor-pointer"
+              onClick={() => setShowCard(false)}
+            >
+              <IoClose className="text-lg md:text-2xl " />
             </button>
           </div>
           {cart.length > 0 ? (

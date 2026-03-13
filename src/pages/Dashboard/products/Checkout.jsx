@@ -45,7 +45,7 @@ const Checkout = ({ setShowCard, checkForm }) => {
       });
 
       if (result.error) {
-        result.error.message;
+        setError(result.error.message);
         isValid = false;
       } else {
         toast.success("Payment Successful");
