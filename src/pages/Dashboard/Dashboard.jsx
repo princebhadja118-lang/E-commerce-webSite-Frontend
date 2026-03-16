@@ -30,12 +30,12 @@ const Dashboard = () => {
           </div>
           <div className="md:flex-row md:flex hidden items-center md:gap-5 ">
             <div className="bg-gray-300 px-3 flex items-center  w-35 lg:w-full">
-              <i className="fa-solid fa-magnifying-glass text-black"></i>
+              {/* <i className="fa-solid fa-magnifying-glass text-black"></i>
               <input
                 type="search"
                 placeholder="Search..."
                 className="px-3 py-2 bg-transparent border-0 outline-0 rounded text-black"
-              />
+              /> */}
             </div>
             <div className="font-semibold flex gap-4 px-4">
               <NavLink>Home</NavLink>
@@ -63,12 +63,12 @@ const Dashboard = () => {
             <div className="md:hidden">
               <div className="md:flex-row flex flex-col items-center md:gap-5 transition-all duration-300 ">
                 <div className="bg-gray-300 px-3 flex items-center w-50">
-                  <i className="fa-solid fa-magnifying-glass text-black"></i>
+                  {/* <i className="fa-solid fa-magnifying-glass text-black"></i>
                   <input
                     type="search"
                     placeholder="Search..."
                     className="px-3 py-2 border-0 outline-0 rounded text-black"
-                  />
+                  /> */}
                 </div>
                 <div className="font-semibold flex flex-col gap-1 w-full items-center justify-center">
                   <NavLink>Home</NavLink>

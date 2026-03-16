@@ -71,30 +71,30 @@ const OrdersDetails = ({ setShowOrders }) => {
                           fetchProductById(product._id) ||
                             setSelectedOrder(true);
                         }}
-                        className="flex flex-col justify-center md:flex-row md:justify-between items-center w-full border-t border-gray-300 py-2 cursor-pointer"
+                        className="w-full border-t border-gray-300 py-2 cursor-pointer"
                       >
-                        <div className="flex flex-col md:flex-row items-center justify-between w-full gap-2">
-                          <div className="flex items-center justify-center md:items-start py-2">
+                        <div className="flex flex-col md:flex-row items-center justify-between w-full gap-2 py-1">
+                          <div className="flex items-center justify-center md:justify-center md:items-start px-2">
                             <img
                               src={product.img}
                               alt={product.title}
-                              className="h-16 w-16 object-contain pl-2"
+                              className="h-16 w-16 object-contain"
                             />
-                            <div className="flex flex-col justify-center items-start h-full">
-                              <li className="text-xl font-semibold px-2">
+                            <div className="flex flex-col justify-center items-start h-full px-2 py-1.5">
+                              <li className="text-xl font-semibold">
                                 {product.title}
                               </li>
-                              <li className="px-2">
+                              <li>
                                 Placed on:{" "}
                                 {new Date(order.date).toLocaleDateString()}{" "}
                               </li>
                             </div>
                           </div>
-                          <div className="flex flex-col items-center justify-center">
-                            <li className="text-lg font-semibold text-gray-700 px-2">
+                          <div className="flex flex-col items-center justify-center py-1.5 px-2">
+                            <li className="text-lg font-semibold text-gray-700">
                               ₹{product.price.toFixed(2)}
                             </li>
-                            <li className="px-2">
+                            <li>
                               <DeliveryStatus
                                 date={order.date}
                                 time={order.time}

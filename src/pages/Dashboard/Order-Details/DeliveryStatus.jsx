@@ -18,7 +18,7 @@ const DeliveryStatus = ({ date, time }) => {
     </span>
   ) : (
     <span className="text-xs bg-yellow-100 text-yellow-700 font-semibold px-2 py-1 rounded-full">
-      Pending · {remaining} min left
+      Delivery in {remaining} minute
     </span>
   );
 };

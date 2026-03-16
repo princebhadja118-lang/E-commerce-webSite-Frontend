@@ -82,7 +82,7 @@ const ShopingCard = ({ setShowCard }) => {
 
   return (
     <div className="fixed inset-0 bg-black/50 w-full h-full flex justify-center items-center p-4 md:p-8">
-      <div className="bg-white w-full md:w-fit py-3 pr-3 rounded shadow flex flex-col md:flex-row gap-5">
+      <div className="bg-white w-full md:w-fit py-3 px-3 rounded shadow flex flex-col md:flex-row gap-5">
         <div>
           {cart.length > 0 ? (
             <div className="h-55 md:h-120 overflow-y-scroll p-2 md:w-100 grid grid-cols-1 gap-2">
@@ -93,14 +93,14 @@ const ShopingCard = ({ setShowCard }) => {
                 >
                   <div>
                     <div className="flex flex-col md:flex-row justify-start md:justify-between gap-1 md:gap-3 ">
-                      <div className="flex md:items-center md:justify-center ">
+                      <div>
                         <img
                           src={item.img}
                           alt={item.title}
                           className="w-10 h-10 md:w-20 md:h-20 object-contain"
                         />
                       </div>
-                      <div className="flex flex-col">
+                      <div className="flex flex-col items-start justify-center h-full">
                         <span className="font-semibold line-clamp-1 text-sm md:text-base text-gray-500">
                           {item.title}
                         </span>
