@@ -4,10 +4,10 @@ import logo from "../../assets/rklogo-removebg-preview.png";
 import userIcon from "../../assets/profile.png";
 import Products from "./products/Products";
 import { NavLink } from "react-router-dom";
-import OrdersDetails from "./OrdersDetails";
+import OrdersDetails from "./Order-Details/OrdersDetails";
 
 const Dashboard = () => {
-  const { logout, user } = useContext(AuthContext);
+  const { logout } = useContext(AuthContext);
   const [menu, setMenu] = useState(false);
   const [showOrders, setShowOrders] = useState(false);
 

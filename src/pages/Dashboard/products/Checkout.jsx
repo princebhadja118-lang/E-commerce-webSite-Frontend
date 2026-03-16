@@ -6,6 +6,7 @@ import { useContext, useState } from "react";
 import { AuthContext } from "../../../auth/AuthContext";
 
 const Checkout = ({ setShowCard, checkForm, formData }) => {
+  const [OrderTime] = useState(() => Math.floor(Math.random() * 30) + 10);
   const stripe = useStripe();
   const elements = useElements();
 
@@ -14,11 +15,17 @@ const Checkout = ({ setShowCard, checkForm, formData }) => {
 
   const cart = useSelector((state) => state.cart.cartItems);
   const { user } = useContext(AuthContext);
+  const [OrderTimePopup, setOrderTimePopup] = useState(false);
 
   const dispatch = useDispatch();
 
   const totalAmount = cart.reduce((total, item) => total + item.price, 0);
-
+  const confirBtn = () => {
+    toast.success(`Estimated Delivery Time: ${OrderTime} minutes`);
+    setOrderTimePopup(false);
+    dispatch(clearCart());
+    setShowCard(false);
+  };
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -60,8 +67,8 @@ const Checkout = ({ setShowCard, checkForm, formData }) => {
         setLoading(false);
         toast.success("Payment Successful");
         const paymentId = result.paymentIntent?.id;
-
-        //store order details
+        const current = new Date();
+        console.log(current);
         await fetch("http://localhost:5000/api/orders/create-order", {
           method: "POST",
           headers: {
@@ -69,17 +76,17 @@ const Checkout = ({ setShowCard, checkForm, formData }) => {
           },
           body: JSON.stringify({
             userId: user.id,
+            img: cart.img,
             products: cart,
             totalAmount: totalAmount,
             shippingAddress: formData,
             paymentId: paymentId,
+            date: current,
+            time: OrderTime,
           }),
         });
-
-        dispatch(clearCart());
-
-        setShowCard(false);
         setLoading(false);
+        setOrderTimePopup(true);
       }
     } catch (err) {
       console.error(err);
@@ -101,11 +108,30 @@ const Checkout = ({ setShowCard, checkForm, formData }) => {
         className="w-full mt-2 py-2 bg-gray-600 hover:bg-gray-700 flex justify-center items-center font-semibold text-white rounded cursor-pointer"
       >
         {loading ? (
-          <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin "></div>
+          <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
         ) : (
-          `Pay ₹${cart.reduce((total, item) => total + item.price, 0)}`
+          `Pay ₹${totalAmount}`
         )}
       </button>
+
+      {OrderTimePopup && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black/50 z-50">
+          <div className="bg-white p-6 rounded shadow-lg text-center">
+            <p className="text-lg font-semibold mb-4">
+              Your order has been placed! 🎉
+            </p>
+            <p className="text-gray-600 mb-4">
+              Estimated Delivery Time: <strong>{OrderTime} minutes</strong>
+            </p>
+            <button
+              onClick={confirBtn}
+              className="px-6 py-2 bg-gray-700 text-white rounded hover:bg-gray-800 cursor-pointer"
+            >
+              Confirm
+            </button>
+          </div>
+        </div>
+      )}
     </form>
   );
 };
