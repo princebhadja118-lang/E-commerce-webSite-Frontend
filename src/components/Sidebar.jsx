@@ -29,7 +29,7 @@ const Sidebar = () => {
         <NavLink
           to="Ahome"
           className={({ isActive }) =>
-            `flex items-center justify-center md:justify-start gap-2 p-2  rounded ${
+            `flex items-center justify-center md:justify-start gap-1 md:gap-2 p-2 rounded ${
               isActive
                 ? `bg-blue-500 ${menu ? "md:ml-5" : " w-fit"}`
                 : "justify-start m-0"
@@ -44,7 +44,7 @@ const Sidebar = () => {
         <NavLink
           to="profile"
           className={({ isActive }) =>
-            `flex items-center justify-center gap-2 p-2 md:justify-start rounded ${
+            `flex items-center justify-center gap-1 md:gap-2 p-2 md:justify-start rounded ${
               isActive
                 ? `bg-blue-500 ${menu ? "md:ml-5" : "w-fit"}`
                 : "justify-start "
@@ -59,7 +59,7 @@ const Sidebar = () => {
         <NavLink
           to="user"
           className={({ isActive }) =>
-            `flex items-center justify-center md:justify-start gap-2 p-2 rounded ${
+            `flex items-center justify-center md:justify-start gap-1 md:gap-2 p-2 rounded ${
               isActive
                 ? `bg-blue-500 ${menu ? "md:ml-5" : "w-fit"}`
                 : "justify-start"
@@ -74,7 +74,7 @@ const Sidebar = () => {
         <NavLink
           to="product"
           className={({ isActive }) =>
-            `flex items-center justify-center md:justify-start gap-2 p-2 rounded ${
+            `flex items-center justify-center md:justify-start gap-1 md:gap-2 p-2 rounded ${
               isActive
                 ? `bg-blue-500 flex ${menu ? "md:ml-5" : "w-fit"}`
                 : "justify-start"
@@ -89,7 +89,7 @@ const Sidebar = () => {
         <NavLink
           to="orders"
           className={({ isActive }) =>
-            `flex items-center justify-center md:justify-start gap-2 p-2 rounded ${
+            `flex items-center justify-center md:justify-start gap-1 md:gap-2 p-2 rounded ${
               isActive
                 ? `bg-blue-500 flex ${menu ? "md:ml-5" : "w-fit"}`
                 : "justify-start"

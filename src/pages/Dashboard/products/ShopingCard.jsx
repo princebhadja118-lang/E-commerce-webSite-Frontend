@@ -45,39 +45,26 @@ const ShopingCard = ({ setShowCard }) => {
   };
 
   const checkForm = () => {
-    let isValid = true;
-    if (!formData.name) {
-      setErrors({ ...errors, name: "Name is required" });
-      isValid = false;
-    } else if (!formData.email) {
-      setErrors({ ...errors, email: "Email is required" });
-      isValid = false;
-    } else if (!formData.phone) {
-      setErrors({ ...errors, phone: "Phone is required" });
-      isValid = false;
-    } else if (formData.phone.length !== 10) {
-      setErrors({ ...errors, phone: "Phone number must be 10 digits" });
-      isValid = false;
-    } else if (!formData.address) {
-      setErrors({ ...errors, address: "Address is required" });
-      isValid = false;
-    } else if (!formData.city) {
-      setErrors({ ...errors, city: "City is required" });
-      isValid = false;
-    } else if (!formData.state) {
-      setErrors({ ...errors, state: "State is required" });
-      isValid = false;
-    } else if (!formData.pincode) {
-      setErrors({ ...errors, pincode: "Pincode is required" });
-      isValid = false;
-    } else if (formData.pincode.length !== 6) {
-      setErrors({ ...errors, pincode: "Pincode must be 6 digits" });
-      isValid = false;
-    } else if (!formData.country) {
-      setErrors({ ...errors, country: "Country is required" });
-      isValid = false;
-    }
-    return isValid;
+    const validateEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+    const newErrors = {};
+
+    if (!formData.name) newErrors.name = "Name is required";
+    if (!formData.email) newErrors.email = "Email is required";
+    else if (!validateEmail(formData.email))
+      newErrors.email = "Invalid email format";
+    if (!formData.phone) newErrors.phone = "Phone is required";
+    else if (String(formData.phone).length !== 10)
+      newErrors.phone = "Phone number must be 10 digits";
+    if (!formData.address) newErrors.address = "Address is required";
+    if (!formData.city) newErrors.city = "City is required";
+    if (!formData.state) newErrors.state = "State is required";
+    if (!formData.pincode) newErrors.pincode = "Pincode is required";
+    else if (String(formData.pincode).length !== 6)
+      newErrors.pincode = "Pincode must be 6 digits";
+    if (!formData.country) newErrors.country = "Country is required";
+
+    setErrors((prev) => ({ ...prev, ...newErrors }));
+    return Object.keys(newErrors).length === 0;
   };
 
   return (

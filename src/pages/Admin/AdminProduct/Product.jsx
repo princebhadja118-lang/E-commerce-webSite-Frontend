@@ -29,7 +29,9 @@ const Product = () => {
     <div className="text-black">
       {/* Add Product Header */}
       <div className="bg-white/50 flex flex-col md:flex-row justify-between p-3 border-2 border-gray-400 border-dashed my-5">
-        <code className="text-2xl px-3 py-2">Add Products</code>
+        <code className="text-lg md:text-2xl px-1 md:px-3 py-2">
+          Add Products
+        </code>
         <button
           onClick={() => setShowPopup(true)}
           className="bg-gray-600 text-white px-4 py-2 rounded shadow-lg hover:bg-gray-900 cursor-pointer"

@@ -35,11 +35,11 @@ const AdminOrders = () => {
             <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-3 gap-2">
               <div>
                 <p className="text-xs text-gray-400">Order ID</p>
-                <p className="font-mono text-sm font-semibold">{order._id}</p>
+                <p className="font-semibold text-sm">{order._id}</p>
               </div>
               <div>
                 <p className="text-xs text-gray-400">User ID</p>
-                <p className="font-mono text-sm">{order.userId}</p>
+                <p className="text-sm">{order.userId}</p>
               </div>
               <div>
                 <p className="text-xs text-gray-400">Date</p>
