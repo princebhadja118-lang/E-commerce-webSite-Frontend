@@ -18,8 +18,6 @@ const OrdersDetails = ({ setShowOrders }) => {
       });
   };
 
-  useEffect(() => fetchProductById(), []);
-
   const userOrders = () => {
     fetch(`http://localhost:5000/api/orders/get-orders/${user.id}`)
       .then((res) => res.json())
@@ -65,7 +63,7 @@ const OrdersDetails = ({ setShowOrders }) => {
                   </div>
                   <div className="flex flex-col pt-3 md:pt-0 gap-2">
                     {order.products.map((product) => (
-                      <div
+                      <span
                         key={product._id}
                         onClick={() => {
                           fetchProductById(product._id) ||
@@ -102,7 +100,7 @@ const OrdersDetails = ({ setShowOrders }) => {
                             </li>
                           </div>
                         </div>
-                      </div>
+                      </span>
                     ))}
                   </div>
                 </ul>
@@ -113,6 +111,7 @@ const OrdersDetails = ({ setShowOrders }) => {
             {selectedOrder && (
               <OrderCard
                 idProduct={idProduct}
+                setIdProduct={setIdProduct}
                 setSelectedOrder={setSelectedOrder}
               />
             )}

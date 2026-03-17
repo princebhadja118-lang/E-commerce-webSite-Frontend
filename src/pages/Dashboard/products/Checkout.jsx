@@ -67,6 +67,8 @@ const Checkout = ({ setShowCard, checkForm, formData }) => {
         setLoading(false);
         toast.success("Payment Successful");
         const paymentId = result.paymentIntent?.id;
+        console.log(paymentId);
+
         const current = new Date();
         await fetch("http://localhost:5000/api/orders/create-order", {
           method: "POST",
@@ -84,6 +86,8 @@ const Checkout = ({ setShowCard, checkForm, formData }) => {
             time: OrderTime,
           }),
         });
+        console.log(paymentId);
+
         setLoading(false);
         setOrderTimePopup(true);
       }

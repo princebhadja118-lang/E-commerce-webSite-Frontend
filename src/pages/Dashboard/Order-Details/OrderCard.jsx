@@ -1,12 +1,12 @@
 import React from "react";
 import { IoClose } from "react-icons/io5";
 
-const OrderCard = ({ setSelectedOrder, idProduct }) => {
+const OrderCard = ({ setSelectedOrder, idProduct, setIdProduct }) => {
   return (
     <div className="fixed inset-0 flex flex-col gap-4 bg-black/80 justify-center items-center h-full w-full p-2 ">
       <div className="w-fit bg-white rounded flex flex-col justify-center items-center shadow shadow-gray-300">
         <button
-          onClick={() => setSelectedOrder(false)}
+          onClick={() => setSelectedOrder(false) || setIdProduct(null)}
           className="pr-2 py-2 w-full flex justify-end items-center text-gray-500 hover:text-gray-700 cursor-pointer"
         >
           <IoClose size={25} />
