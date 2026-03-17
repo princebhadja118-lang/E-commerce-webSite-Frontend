@@ -3,7 +3,6 @@ import DeliveryStatus from "../../Dashboard/Order-Details/DeliveryStatus";
 
 const AdminOrders = () => {
   const [orders, setOrders] = useState([]);
-  const [search, setSearch] = useState("");
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -14,36 +13,24 @@ const AdminOrders = () => {
       .finally(() => setLoading(false));
   }, []);
 
-  const filtered = orders.filter(
-    (o) =>
-      o._id.toLowerCase().includes(search.toLowerCase()) ||
-      o.userId?.toString().toLowerCase().includes(search.toLowerCase()),
-  );
-
   return (
-    <div className="bg-gray-100 my-5">
-      <div className="flex flex-col md:flex-row justify-between items-center gap-4 mb-4">
-        <h2 className="text-xl md:text-3xl font-bold w-full p-4">
+    <div className="bg-gray-100">
+      <div className="mb-2">
+        <h2 className="text-xl md:text-3xl font-bold w-full py-4">
           Order Management
         </h2>
-        <input
-          type="search"
-          placeholder="Search by order ID or user..."
-          onChange={(e) => setSearch(e.target.value)}
-          className="border px-3 py-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 w-full"
-        />
       </div>
 
       {loading ? (
         <p className="text-gray-500 p-4">Loading orders...</p>
-      ) : filtered.length === 0 ? (
+      ) : orders.length === 0 ? (
         <p className="text-gray-500 p-4">No orders found.</p>
       ) : (
-        <p className="text-gray-600 py-2">Found {filtered.length} order(s).</p>
+        <p className="text-gray-600 py-2">Found {orders.length} order(s).</p>
       )}
 
       <div className="flex flex-col gap-4">
-        {filtered.map((order) => (
+        {orders.map((order) => (
           <div key={order._id} className="bg-white rounded-lg shadow-md p-4">
             <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-3 gap-2">
               <div>
