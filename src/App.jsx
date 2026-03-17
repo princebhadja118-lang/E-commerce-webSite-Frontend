@@ -12,6 +12,7 @@ import User from "./pages/Admin/Auser/User";
 import Profile from "./pages/Admin/AdminProfile/Profile";
 import Product from "./pages/Admin/AdminProduct/Product";
 import AHome from "./pages/Admin/AdminHome/AHome";
+import AdminOrders from "./pages/Admin/AdminOrders/AdminOrders";
 import Home from "./pages/Home";
 
 const App = () => {
@@ -44,6 +45,7 @@ const App = () => {
           <Route path="profile" element={<Profile />} />
           <Route path="user" element={<User />} />
           <Route path="product" element={<Product />} />
+          <Route path="orders" element={<AdminOrders />} />
         </Route>
 
         <Route path="/unauthorized" element={<Unauthorized />} />

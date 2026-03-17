@@ -82,7 +82,7 @@ const ShopingCard = ({ setShowCard }) => {
 
   return (
     <div className="fixed inset-0 bg-black/50 w-full h-full flex justify-center items-center p-4 md:p-8">
-      <div className="bg-white w-full md:w-fit py-3 px-3 rounded shadow flex flex-col md:flex-row gap-5">
+      <div className="bg-white w-full md:w-fit md:py-3 px-3 rounded shadow flex flex-col md:flex-row gap-5">
         <div>
           {cart.length > 0 ? (
             <div className="h-55 md:h-120 overflow-y-scroll p-2 md:w-100 grid grid-cols-1 gap-2">
@@ -122,12 +122,10 @@ const ShopingCard = ({ setShowCard }) => {
                 </div>
               ))}
             </div>
-          ) : (
-            " "
-          )}
+          ) : null}
         </div>
         <div className="w-full">
-          <div className="flex justify-between items-center mb-2 w-99">
+          <div className="flex justify-between items-center mb-2 md:w-99">
             <h2 className="text-sm md:text-xl font-bold">Shopping Cart</h2>
             <button
               className="cursor-pointer"

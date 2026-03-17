@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import toast from "react-hot-toast";
 import { IoClose } from "react-icons/io5";
+import { FaTrash } from "react-icons/fa";
 
 const ProductCards = ({
   products,
@@ -17,6 +18,24 @@ const ProductCards = ({
     img: "",
     category: "",
   });
+
+  const handleDelete = async (productId) => {
+    if (!window.confirm("Delete this product?")) return;
+    try {
+      const res = await fetch(
+        `http://localhost:5000/api/products/delete-product/${productId}`,
+        { method: "DELETE" },
+      );
+      if (res.ok) {
+        toast.success("Product deleted!");
+        refreshProduct();
+      } else {
+        toast.error("Failed to delete product.");
+      }
+    } catch {
+      toast.error("Failed to delete product.");
+    }
+  };
 
   const handleEdit = async () => {
     try {
@@ -93,15 +112,23 @@ const ProductCards = ({
                         </span>
                       )}
                     </code>
-                    <button
-                      onClick={() => {
-                        setForm(product);
-                        setShowEditForm(true);
-                      }}
-                      className="bg-gray-600 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded w-full cursor-pointer"
-                    >
-                      Edit Product
-                    </button>
+                    <div className="flex gap-2">
+                      <button
+                        onClick={() => {
+                          setForm(product);
+                          setShowEditForm(true);
+                        }}
+                        className="bg-gray-600 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded flex-1 cursor-pointer"
+                      >
+                        Edit
+                      </button>
+                      <button
+                        onClick={() => handleDelete(product._id)}
+                        className="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded cursor-pointer"
+                      >
+                        <FaTrash />
+                      </button>
+                    </div>
                   </div>
                 </div>
               </div>

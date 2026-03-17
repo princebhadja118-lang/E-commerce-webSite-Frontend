@@ -7,7 +7,7 @@ const OrderCard = ({ setSelectedOrder, idProduct }) => {
       <div className="w-fit bg-white rounded flex flex-col justify-center items-center shadow shadow-gray-300">
         <button
           onClick={() => setSelectedOrder(false)}
-          className="pr-2 py-2 w-full flex justify-end items-center text-gray-500 hover:text-gray-700"
+          className="pr-2 py-2 w-full flex justify-end items-center text-gray-500 hover:text-gray-700 cursor-pointer"
         >
           <IoClose size={25} />
         </button>

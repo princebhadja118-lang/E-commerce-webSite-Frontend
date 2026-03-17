@@ -85,6 +85,21 @@ const Sidebar = () => {
           <i className="fa-solid fa-box-open"></i>
           {menu && <span>Products</span>}
         </NavLink>
+
+        <NavLink
+          to="orders"
+          className={({ isActive }) =>
+            `flex items-center justify-center md:justify-start gap-2 p-2 rounded ${
+              isActive
+                ? `bg-blue-500 flex ${menu ? "md:ml-5" : "w-fit"}`
+                : "justify-start"
+            }`
+          }
+          title="Orders"
+        >
+          <i className="fa-solid fa-receipt"></i>
+          {menu && <span>Orders</span>}
+        </NavLink>
       </div>
     </div>
   );

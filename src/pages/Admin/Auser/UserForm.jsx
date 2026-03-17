@@ -3,9 +3,10 @@ import toast from "react-hot-toast";
 import { IoClose } from "react-icons/io5";
 
 const UserForm = ({ setShowForm, selectedUser, refreshUsers }) => {
-  const [username, setUsername] = useState(selectedUser?.username || "");
-  const [email, setEmail] = useState(selectedUser?.email || "");
-  const [role, setRole] = useState(selectedUser?.role || "");
+  const [username, setUsername] = useState(selectedUser?.username || null);
+  const [email, setEmail] = useState(selectedUser?.email || null);
+  const [role, setRole] = useState(selectedUser?.role || null);
+  const [errors, setErrors] = useState("");
 
   const handleUpdateData = async () => {
     const admin = JSON.parse(localStorage.getItem("user"));
@@ -29,7 +30,7 @@ const UserForm = ({ setShowForm, selectedUser, refreshUsers }) => {
         refreshUsers();
         setShowForm(false);
       } else {
-        toast.error(data.message || "Failed to Update Profile");
+        setErrors({ message: data.message || "Failed to Update Profile" });
       }
     } catch (err) {
       console.error("Error updating admin data:", err);
@@ -80,6 +81,9 @@ const UserForm = ({ setShowForm, selectedUser, refreshUsers }) => {
           >
             Update
           </button>
+          {errors.message && (
+            <p className="text-red-500 text-sm">{errors.message}</p>
+          )}
         </div>
       </div>
     </>
