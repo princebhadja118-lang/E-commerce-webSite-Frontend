@@ -13,6 +13,7 @@ const Register = () => {
   const navigate = useNavigate();
 
   const handleRegister = async () => {
+    setMessage("");
     try {
       const res = await fetch("http://localhost:5000/api/register", {
         method: "POST",
@@ -28,6 +29,7 @@ const Register = () => {
       const data = await res.json();
       if (res.ok) {
         setSucessMessage("Registration successful!");
+        setMessage("");
         navigate("/login");
       } else {
         setMessage(data.message || "Registration failed.");
