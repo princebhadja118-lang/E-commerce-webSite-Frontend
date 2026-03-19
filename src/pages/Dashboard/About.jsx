@@ -1,57 +1,68 @@
 import React from "react";
+import { FaShieldAlt, FaLeaf, FaTruck, FaHandshake } from "react-icons/fa";
 
 const About = () => {
   return (
-    <div className="mb-5 md:m-5">
-      <div className="md:max-w-6xl mx-auto bg-white rounded-2xl shadow-xl p-4 md:p-12 lg:h-250">
-        <h1 className="text-3xl md:text-5xl font-bold mb-8">
-          <span className="underline">ABOUT</span>
-          <span className="text-red-500"> US</span>
-        </h1>
+    <div className="max-w-3xl mx-auto px-4 py-12">
 
-        <div className="space-y-6 text-gray-700 leading-relaxed md:text-xl">
-          <p>
-            <span className="font-bold text-red-500">RK Polyplast</span> is a
-            trusted name in the field of agrochemical packaging, known for
-            delivering superior packaging solutions that combine functionality,
-            durability, and design excellence. Established with the vision of
-            providing innovative packaging for the agriculture and chemical
-            sectors, we have grown into a leading manufacturer serving clients
-            across domestic and international markets.
-          </p>
+      {/* Heading */}
+      <h1 className="text-3xl font-bold text-gray-800 mb-2">
+        About <span className="text-blue-600">ShopKart</span>
+      </h1>
+      <p className="text-gray-500 mb-8 text-base leading-relaxed">
+        ShopKart is a trusted online store for agrochemical packaging products.
+        We deliver high-quality, durable PET bottles for pesticides and
+        fertilizers — directly to your doorstep across India.
+      </p>
 
-          <p>
-            With a strong focus on quality and safety, we produce packaging that
-            meets the stringent demands of fertilizers, pesticides, herbicides,
-            fungicides, and other agrochemical products. Our solutions are
-            engineered to be leak-proof, UV-resistant, tamper-evident, and
-            chemically compatible, ensuring the safe storage and transportation
-            of agricultural inputs.
-          </p>
+      {/* Stats */}
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-10">
+        {[
+          { value: "10+", label: "Years Experience" },
+          { value: "500+", label: "Happy Clients" },
+          { value: "50+", label: "Products" },
+          { value: "15+", label: "States Served" },
+        ].map((s, i) => (
+          <div key={i} className="bg-white rounded-xl shadow p-4 text-center">
+            <p className="text-2xl font-extrabold text-blue-600">{s.value}</p>
+            <p className="text-gray-500 text-sm mt-1">{s.label}</p>
+          </div>
+        ))}
+      </div>
 
-          <p>
-            Our state-of-the-art manufacturing facility is equipped with
-            advanced technology and quality control systems, allowing us to
-            consistently meet industry standards and deliver customized
-            solutions. Based on client needs. From small-volume packaging to
-            bulk containers, we offer a comprehensive range of bottle sizes and
-            designs to suit various product requirements. What sets RK Polyplast
-            apart is our customer-centric approach. We work closely with our
-            clients to understand their challenges and offer packaging that not
-            only safeguards their products but also enhances shelf appeal
-            through smart design, vibrant printing, and thoughtful branding
-            elements.
-          </p>
+      {/* Values */}
+      <h2 className="text-xl font-bold text-gray-800 mb-4">Why Choose Us</h2>
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-10">
+        {[
+          { icon: <FaShieldAlt className="text-blue-600" />, title: "Quality First", desc: "Every product tested before dispatch." },
+          { icon: <FaLeaf className="text-green-500" />, title: "Eco Friendly", desc: "Recyclable and sustainable packaging." },
+          { icon: <FaTruck className="text-orange-500" />, title: "Fast Delivery", desc: "Pan-India delivery, on time." },
+          { icon: <FaHandshake className="text-red-500" />, title: "Customer First", desc: "Customized solutions for every client." },
+        ].map((v, i) => (
+          <div key={i} className="flex items-start gap-3 bg-white rounded-xl shadow p-4">
+            <div className="text-xl mt-0.5">{v.icon}</div>
+            <div>
+              <p className="font-semibold text-gray-800 text-sm">{v.title}</p>
+              <p className="text-gray-500 text-sm">{v.desc}</p>
+            </div>
+          </div>
+        ))}
+      </div>
 
-          <p>
-            At <span className="font-bold text-red-500">RK Polyplast</span>,
-            sustainability is also a growing focus. We are actively exploring
-            eco-friendly materials and recyclable solutions to reduce our
-            environmental footprint and support a more sustainable future for
-            agriculture.
-          </p>
+      {/* Contact */}
+      <div className="bg-gray-800 text-white rounded-2xl p-6 text-center">
+        <h2 className="text-xl font-bold mb-1">Get In Touch</h2>
+        <p className="text-gray-400 text-sm mb-4">We'd love to hear from you.</p>
+        <div className="flex flex-col sm:flex-row gap-3 justify-center">
+          <a href="mailto:contact@shopkart.com" className="bg-white text-gray-800 font-semibold px-5 py-2 rounded-xl hover:bg-gray-100 transition text-sm">
+            Email Us
+          </a>
+          <a href="tel:+919999999999" className="border border-white text-white font-semibold px-5 py-2 rounded-xl hover:bg-white hover:text-gray-800 transition text-sm">
+            Call Now
+          </a>
         </div>
       </div>
+
     </div>
   );
 };

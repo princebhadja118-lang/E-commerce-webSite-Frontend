@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { IoClose } from "react-icons/io5";
+import { FaTrash } from "react-icons/fa";
 import { Elements } from "@stripe/react-stripe-js";
 import { loadStripe } from "@stripe/stripe-js";
 import Checkout from "./Checkout";
@@ -11,6 +12,7 @@ const stripePromise = loadStripe(
 );
 
 const ShopingCard = ({ setShowCard }) => {
+  const [step, setStep] = useState(1);
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -21,285 +23,233 @@ const ShopingCard = ({ setShowCard }) => {
     pincode: "",
     country: "",
   });
-  const [errors, setErrors] = useState({
-    name: "",
-    email: "",
-    phone: "",
-    address: "",
-    city: "",
-    state: "",
-    pincode: "",
-    country: "",
-  });
-
-  const handleform = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-    setErrors({ ...errors, [e.target.name]: "" });
-  };
+  const [errors, setErrors] = useState({});
 
   const dispatch = useDispatch();
   const cart = useSelector((state) => state.cart.cartItems);
+  const total = cart.reduce((sum, item) => sum + item.price, 0);
 
-  const handleRemove = (itemId) => {
-    dispatch(removeFromCart(itemId));
+  const handleForm = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+    setErrors({ ...errors, [e.target.name]: "" });
   };
 
   const checkForm = () => {
     const validateEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
     const newErrors = {};
-
-    if (!formData.name) newErrors.name = "Name is required";
-    if (!formData.email) newErrors.email = "Email is required";
-    else if (!validateEmail(formData.email))
-      newErrors.email = "Invalid email format";
-    if (!formData.phone) newErrors.phone = "Phone is required";
+    if (!formData.name) newErrors.name = "Name is Required";
+    else if (!formData.email) newErrors.email = "Email is Required";
+    else if (!validateEmail(formData.email)) newErrors.email = "Invalid email";
+    else if (!formData.phone) newErrors.phone = "Phone is Required";
     else if (String(formData.phone).length !== 10)
-      newErrors.phone = "Phone number must be 10 digits";
-    if (!formData.address) newErrors.address = "Address is required";
-    if (!formData.city) newErrors.city = "City is required";
-    if (!formData.state) newErrors.state = "State is required";
-    if (!formData.pincode) newErrors.pincode = "Pincode is required";
+      newErrors.phone = "Must be 10 digits";
+    else if (!formData.address) newErrors.address = "Address is Required";
+    else if (!formData.city) newErrors.city = "City is Required";
+    else if (!formData.state) newErrors.state = "State is Required";
+    else if (!formData.pincode) newErrors.pincode = "Pincode is Required";
     else if (String(formData.pincode).length !== 6)
-      newErrors.pincode = "Pincode must be 6 digits";
-    if (!formData.country) newErrors.country = "Country is required";
+      newErrors.pincode = "Must be 6 digits";
+    else if (!formData.country) newErrors.country = "Country is Required";
+    setErrors(newErrors);
 
-    setErrors((prev) => ({ ...prev, ...newErrors }));
     return Object.keys(newErrors).length === 0;
   };
 
+  const handleProceed = () => {
+    if (checkForm()) setStep(3);
+  };
+
+  const steps = ["Cart", "Address", "Payment"];
+
   return (
-    <div className="fixed inset-0 bg-black/50 w-full h-full flex justify-center items-center p-4 md:p-8">
-      <div className="bg-white w-full md:w-fit md:py-3 px-3 rounded shadow flex flex-col md:flex-row gap-5">
-        <div>
-          {cart.length > 0 ? (
-            <div className="h-55 md:h-120 overflow-y-scroll p-2 md:w-100 grid grid-cols-1 gap-2">
+    <div className="fixed inset-0 bg-black/60 z-50 flex justify-end">
+      <div className="bg-white w-full max-w-lg h-full flex flex-col shadow-2xl">
+        {/* Header */}
+        <div className="flex justify-between items-center px-5 py-4 border-b bg-gray-800 text-white">
+          <div>
+            <h2 className="text-lg font-bold">Shopping Cart</h2>
+            <p className="text-xs text-gray-300">{cart.length} item(s)</p>
+          </div>
+          <button
+            onClick={() => setShowCard(false)}
+            className="hover:bg-gray-700 p-1 rounded cursor-pointer"
+          >
+            <IoClose size={24} />
+          </button>
+        </div>
+
+        {/* Step Indicator */}
+        <div className="flex items-center justify-center gap-2 px-5 py-3 bg-gray-50 border-b">
+          {steps.map((s, i) => (
+            <React.Fragment key={s}>
+              <div
+                className={`flex items-center gap-1.5 text-sm font-semibold ${step === i + 1 ? "text-gray-800" : step > i + 1 ? "text-green-600" : "text-gray-400"}`}
+              >
+                <span
+                  className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold ${step === i + 1 ? "bg-gray-800 text-white" : step > i + 1 ? "bg-green-500 text-white" : "bg-gray-200 text-gray-500"}`}
+                >
+                  {step > i + 1 ? "✓" : i + 1}
+                </span>
+                {s}
+              </div>
+              {i < 2 && <div className="flex-1 h-px bg-gray-200" />}
+            </React.Fragment>
+          ))}
+        </div>
+
+        {/* Content */}
+        <div className="flex-1 overflow-y-auto px-5 py-4">
+          {cart.length === 0 ? (
+            <div className="flex flex-col items-center justify-center h-full gap-4 text-gray-400">
+              <i className="fa-solid fa-cart-shopping text-6xl" />
+              <p className="text-lg font-semibold">Your cart is empty</p>
+              <button
+                onClick={() => setShowCard(false)}
+                className="bg-gray-800 text-white px-6 py-2 rounded-xl font-semibold hover:bg-gray-900 cursor-pointer"
+              >
+                Continue Shopping
+              </button>
+            </div>
+          ) : step === 1 ? (
+            /* Step 1 — Cart Items */
+            <div className="flex flex-col gap-3">
               {cart.map((item) => (
                 <div
                   key={item._id}
-                  className="flex items-center border-b-gray-200 border-b-2 md:flex-row justify-between md:items-center w-full"
+                  className="flex items-center gap-3 bg-gray-50 rounded-xl p-3 border border-gray-100"
                 >
-                  <div>
-                    <div className="flex flex-col md:flex-row justify-start md:justify-between gap-1 md:gap-3 ">
-                      <div>
-                        <img
-                          src={item.img}
-                          alt={item.title}
-                          className="w-10 h-10 md:w-20 md:h-20 object-contain"
-                        />
-                      </div>
-                      <div className="flex flex-col items-start justify-center h-full">
-                        <span className="font-semibold line-clamp-1 text-sm md:text-base text-gray-500">
-                          {item.title}
-                        </span>
-                        <span className="text-gray-500 text-sm md:text-base">
-                          ₹{item.price}
-                        </span>
-                      </div>
-                    </div>
+                  <img
+                    src={item.img}
+                    alt={item.title}
+                    className="w-16 h-16 object-contain bg-white rounded-lg border border-gray-400 p-1"
+                  />
+                  <div className="flex-1">
+                    <p className="font-semibold text-sm text-gray-800 line-clamp-2">
+                      {item.title}
+                    </p>
+                    <p className="text-xs text-gray-400">{item.brand}</p>
+                    <p className="text-green-600 font-bold text-sm mt-1">
+                      ₹{item.price}
+                    </p>
                   </div>
-                  <div>
-                    <button
-                      onClick={() => handleRemove(item._id)}
-                      className="bg-red-600 hover:bg-red-700 px-2 py-1 md:px-4 md:py-2 rounded text-sm md:text-base text-white font-semibold cursor-pointer"
-                    >
-                      <span className="hidden md:flex">Remove</span>{" "}
-                      <span className="md:hidden">X</span>
-                    </button>
-                  </div>
+                  <button
+                    onClick={() => dispatch(removeFromCart(item._id))}
+                    className="text-red-400 hover:text-red-600 p-2 hover:bg-red-50 rounded-lg transition cursor-pointer"
+                  >
+                    <FaTrash size={18} />
+                  </button>
                 </div>
               ))}
             </div>
-          ) : null}
-        </div>
-        <div className="w-full">
-          <div className="flex justify-between items-center mb-2 md:w-99">
-            <h2 className="text-sm md:text-xl font-bold">Shopping Cart</h2>
-            <button
-              className="cursor-pointer"
-              onClick={() => setShowCard(false)}
-            >
-              <IoClose className="text-lg md:text-2xl" />
-            </button>
-          </div>
-          {cart.length > 0 ? (
-            <div>
-              <div className=" h-50 md:h-fit overflow-y-scroll ">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-0.5 md:gap-2 mb-2 ">
-                  <div className="md:col-span-2">
-                    <label
-                      htmlFor="name"
-                      className="block text-gray-700 font-semibold mb-0.5  text-sm md:text-base"
-                    >
-                      Full Name
-                    </label>
-                    <input
-                      type="text"
-                      name="name"
-                      id="name"
-                      onChange={handleform}
-                      placeholder="Enter your name"
-                      className="border border-gray-300 p-1 md:p-1.5 rounded w-full"
-                    />
-                    {errors.name && (
-                      <p className="text-red-500 text-sm">{errors.name}</p>
-                    )}
-                  </div>
-
-                  <div className="md:col-span-2">
-                    <label
-                      htmlFor="email"
-                      className="block text-gray-700 font-semibold mb-0.5  text-sm md:text-base"
-                    >
-                      Email Address
-                    </label>
-                    <input
-                      type="text"
-                      name="email"
-                      id="email"
-                      onChange={handleform}
-                      placeholder="Enter your email"
-                      className="border border-gray-300 p-1 md:p-1.5 rounded w-full"
-                    />
-                    {errors.email && (
-                      <p className="text-red-500 text-sm">{errors.email}</p>
-                    )}
-                  </div>
-
-                  <div>
-                    <label
-                      htmlFor="phone"
-                      className="block text-gray-700 font-semibold mb-0.5  text-sm md:text-base"
-                    >
-                      Phone Number
-                    </label>
-                    <input
-                      type="number"
-                      id="phone"
-                      name="phone"
-                      onChange={handleform}
-                      placeholder="Enter your number"
-                      className="border border-gray-300 p-1 md:p-1.5 rounded w-full"
-                    />
-                    {errors.phone && (
-                      <p className="text-red-500 text-sm">{errors.phone}</p>
-                    )}
-                  </div>
-
-                  <div>
-                    <label
-                      htmlFor="address"
-                      className="block text-gray-700 font-semibold mb-0.5  text-sm md:text-base"
-                    >
-                      Address
-                    </label>
-                    <input
-                      type="text"
-                      id="address"
-                      name="address"
-                      onChange={handleform}
-                      placeholder="Enter your address"
-                      className="border border-gray-300 p-1 md:p-1.5 rounded w-full"
-                    />
-                    {errors.address && (
-                      <p className="text-red-500 text-sm">{errors.address}</p>
-                    )}
-                  </div>
-
-                  <div>
-                    <label
-                      htmlFor="city"
-                      className="block text-gray-700 font-semibold mb-0.5  text-sm md:text-base"
-                    >
-                      City
-                    </label>
-                    <input
-                      type="text"
-                      id="city"
-                      name="city"
-                      onChange={handleform}
-                      placeholder="Enter your city"
-                      className="border border-gray-300 p-1 md:p-1.5 rounded w-full"
-                    />
-                    {errors.city && (
-                      <p className="text-red-500 text-sm">{errors.city}</p>
-                    )}
-                  </div>
-
-                  <div>
-                    <label
-                      htmlFor="state"
-                      className="block text-gray-700 font-semibold mb-0.5  text-sm md:text-base"
-                    >
-                      State
-                    </label>
-                    <input
-                      type="text"
-                      id="state"
-                      name="state"
-                      onChange={handleform}
-                      placeholder="Enter your state"
-                      className="border border-gray-300 p-1 md:p-1.5 rounded w-full"
-                    />
-                    {errors.state && (
-                      <p className="text-red-500 text-sm">{errors.state}</p>
-                    )}
-                  </div>
-
-                  <div>
-                    <label
-                      htmlFor="pincode"
-                      className="block text-gray-700 font-semibold mb-0.5  text-sm md:text-base"
-                    >
-                      Pincode
-                    </label>
-                    <input
-                      type="number"
-                      id="pincode"
-                      name="pincode"
-                      onChange={handleform}
-                      placeholder="Enter your pincode"
-                      className="border border-gray-300 p-1 md:p-1.5 rounded w-full"
-                    />
-                    {errors.pincode && (
-                      <p className="text-red-500 text-sm">{errors.pincode}</p>
-                    )}
-                  </div>
-
-                  <div>
-                    <label
-                      htmlFor="country"
-                      className="block font-semibold text-gray-700 mb-0.5 text-sm md:text-base"
-                    >
-                      Country
-                    </label>
-                    <input
-                      type="text"
-                      id="country"
-                      name="country"
-                      onChange={handleform}
-                      placeholder="Enter your country"
-                      className=" border border-gray-300 p-1 md:p-1.5 rounded w-full"
-                    />
-                    {errors.country && (
-                      <p className="text-red-500 text-sm">{errors.country}</p>
-                    )}
-                  </div>
-                </div>
-                <Elements stripe={stripePromise}>
-                  <Checkout
-                    setShowCard={setShowCard}
-                    checkForm={checkForm}
-                    formData={formData}
+          ) : step === 2 ? (
+            /* Step 2 — Address */
+            <div className="grid grid-cols-2 gap-3">
+              {[
+                { name: "name", label: "Full Name", type: "text", span: 2 },
+                { name: "email", label: "Email", type: "email", span: 2 },
+                { name: "phone", label: "Phone", type: "number", span: 1 },
+                { name: "address", label: "Address", type: "text", span: 1 },
+                { name: "city", label: "City", type: "text", span: 1 },
+                { name: "state", label: "State", type: "text", span: 1 },
+                { name: "pincode", label: "Pincode", type: "number", span: 1 },
+                { name: "country", label: "Country", type: "text", span: 1 },
+              ].map((field) => (
+                <div
+                  key={field.name}
+                  className={field.span === 2 ? "col-span-2" : ""}
+                >
+                  <label className="block text-xs font-semibold text-gray-600 mb-1">
+                    {field.label}
+                  </label>
+                  <input
+                    type={field.type}
+                    name={field.name}
+                    value={formData[field.name]}
+                    onChange={handleForm}
+                    placeholder={field.label}
+                    className={`w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-gray-400 transition ${errors[field.name] ? "border-red-400" : "border-gray-300"}`}
                   />
-                </Elements>
-              </div>
+                  {errors[field.name] && (
+                    <p className="text-red-500 text-xs mt-0.5">
+                      {errors[field.name]}
+                    </p>
+                  )}
+                </div>
+              ))}
             </div>
           ) : (
-            <p className="text-gray-500 font-semibold py-5">
-              Your cart is empty.
-            </p>
+            /* Step 3 — Payment */
+            <div>
+              <div className="bg-gray-50 rounded-xl p-4 mb-4 border">
+                <h3 className="font-semibold text-gray-700 mb-2 text-sm">
+                  Order Summary
+                </h3>
+                {cart.map((item) => (
+                  <div
+                    key={item._id}
+                    className="flex justify-between text-sm text-gray-600 py-1 border-b border-gray-100 "
+                  >
+                    <span className="line-clamp-1 flex-1 pr-2">
+                      {item.title}
+                    </span>
+                    <span className="font-semibold text-gray-800">
+                      ₹{item.price}
+                    </span>
+                  </div>
+                ))}
+                <div className="flex justify-between font-bold text-base mt-3 pt-2 border-t border-gray-300">
+                  <span>Total</span>
+                  <span className="text-green-600">₹{total}</span>
+                </div>
+              </div>
+              <Elements stripe={stripePromise}>
+                <Checkout
+                  setShowCard={setShowCard}
+                  checkForm={() => true}
+                  formData={formData}
+                />
+              </Elements>
+            </div>
           )}
         </div>
+
+        {/* Footer */}
+        {cart.length > 0 && (
+          <div className="border-t px-5 py-4 bg-white">
+            <div className="flex justify-between items-center mb-3">
+              <span className="text-gray-500 text-sm">
+                {cart.length} item(s)
+              </span>
+              <span className="font-bold text-lg text-green-600">₹{total}</span>
+            </div>
+            <div className="flex gap-2">
+              {step > 1 && (
+                <button
+                  onClick={() => setStep(step - 1) || setErrors({})}
+                  className="flex-1 border-2 border-gray-800 text-gray-800 font-semibold py-2.5 rounded-xl hover:bg-gray-50 transition cursor-pointer"
+                >
+                  Back
+                </button>
+              )}
+              {step === 1 && (
+                <button
+                  onClick={() => setStep(2)}
+                  className="flex-1 bg-gray-800 hover:bg-gray-900 text-white font-semibold py-2.5 rounded-xl transition cursor-pointer"
+                >
+                  Proceed to Address →
+                </button>
+              )}
+              {step === 2 && (
+                <button
+                  onClick={handleProceed}
+                  className="flex-1 bg-gray-800 hover:bg-gray-900 text-white font-semibold py-2.5 rounded-xl transition cursor-pointer"
+                >
+                  Proceed to Payment →
+                </button>
+              )}
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

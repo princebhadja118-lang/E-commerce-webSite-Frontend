@@ -1,20 +1,32 @@
 import React, { useContext, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "../auth/AuthContext";
+import toast from "react-hot-toast";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [message, setMessage] = useState("");
-  const [isSuccess, setIsSuccess] = useState(false);
+  const [errors, setErrors] = useState({});
   const [showpassword, setShowpassword] = useState(false);
 
   const { login } = useContext(AuthContext);
-
   const navigate = useNavigate();
+
+  const validateForm = () => {
+    const newErrors = {};
+    if (!email.trim()) newErrors.email = "Email is required.";
+    else if (!/\S+@\S+\.\S+/.test(email)) newErrors.email = "Email is invalid.";
+    else if (!password.trim()) newErrors.password = "Password is required.";
+    else if (password.length < 6)
+      newErrors.password = "Password must be at least 6 characters.";
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
 
   const handleLogin = async (e) => {
     e.preventDefault();
+    setErrors({});
+    if (!validateForm()) return;
     try {
       const res = await fetch("http://localhost:5000/api/login", {
         method: "POST",
@@ -28,87 +40,108 @@ const Login = () => {
           JSON.stringify({ ...data.user, token: data.token }),
         );
         login({ ...data.user, token: data.token });
-        setMessage("Login successful!");
-        setIsSuccess(true);
-        if (data.user.role === "admin") {
-          navigate("/admin/Ahome");
-        } else {
-          navigate("/dashboard");
-        }
+        toast.success("Login successful!");
+        if (data.user.role === "admin") navigate("/admin/Ahome");
+        else navigate("/dashboard");
       } else {
-        setMessage(data.message || "Login failed.");
-        setIsSuccess(false);
+        setErrors({ general: data.message || "Login failed." });
       }
     } catch (err) {
-      setMessage("An error occurred during login.");
-      setIsSuccess(false);
+      setErrors({ general: "An error occurred during login." });
     }
   };
 
-  const handleshowpassword = (e) => {
-    e.preventDefault();
-    if (showpassword === false) return setShowpassword(true);
-    else return setShowpassword(false);
-  };
-
   return (
-    <div className="min-h-screen flex items-center justify-center bg-linear-to-br from-blue-50 to-indigo-100 p-4">
-      <div className="bg-white rounded-2xl shadow-2xl p-4 md:p-8 w-full max-w-md">
-        <h1 className="text-2xl md:text-4xl font-bold text-center text-gray-800 mb-8">
+    <div className="flex justify-center items-center min-h-screen bg-linear-to-r from-blue-50 to-indigo-100 p-3">
+      <div className="flex flex-col gap-3 justify-center items-center rounded-2xl shadow-2xl p-6 bg-white w-full max-w-md">
+        <p className="font-bold text-2xl md:text-4xl p-4 text-gray-800">
           Welcome Back
-        </h1>
+        </p>
 
-        <form className="space-y-4">
+        {/* Email */}
+        <div className="w-full">
+          <label
+            htmlFor="email"
+            className="block text-sm font-semibold text-gray-600 mb-1"
+          >
+            Email Address
+          </label>
           <input
             type="email"
-            placeholder="Email"
+            id="email"
+            placeholder="Enter your email"
             value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            className="w-full px-3 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
+            onChange={(e) => {
+              setEmail(e.target.value);
+              setErrors({ ...errors, email: "" });
+            }}
+            className={`w-full border rounded-lg px-3 py-3 text-sm focus:outline-none focus:ring-2 focus:border-transparent transition ${errors.email ? "border-red-500 focus:ring-red-400" : "border-gray-300 focus:ring-blue-500"}`}
           />
-          <div className="flex border border-gray-300 rounded-lg focus:outline-none focus-within:ring-2 focus-within:ring-blue-500 focus:border-transparent transition">
+          {errors.email && (
+            <p className="text-red-500 text-xs mt-1">{errors.email}</p>
+          )}
+        </div>
+
+        {/* Password */}
+        <div className="w-full">
+          <label
+            htmlFor="password"
+            className="block text-sm font-semibold text-gray-600 mb-1"
+          >
+            Password
+          </label>
+          <div
+            className={`flex w-full border rounded-lg focus-within:ring-2 focus-within:border-transparent transition ${errors.password ? "border-red-500 focus-within:ring-red-400" : "border-gray-300 focus-within:ring-blue-500"}`}
+          >
             <input
               type={showpassword ? "text" : "password"}
-              placeholder="Password"
+              id="password"
+              placeholder="Enter your password"
               value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="w-full px-4 py-3 focus:outline-none"
+              onChange={(e) => {
+                setPassword(e.target.value);
+                setErrors({ ...errors, password: "" });
+              }}
+              className="px-3 py-3 w-full focus:outline-none rounded-lg text-sm"
             />
             <button
-              onClick={handleshowpassword}
-              className="pr-2  cursor-pointer"
+              onClick={(e) => {
+                e.preventDefault();
+                setShowpassword((p) => !p);
+              }}
+              className="pr-3 cursor-pointer text-gray-400"
             >
               {showpassword ? (
-                <i className="fa-solid fa-eye-slash"></i>
+                <i className="fa-solid fa-eye-slash" />
               ) : (
-                <i className="fa-solid fa-eye"></i>
+                <i className="fa-solid fa-eye" />
               )}
             </button>
           </div>
-          <button
-            onClick={handleLogin}
-            className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 rounded-lg transition duration-200 shadow-lg hover:shadow-xl cursor-pointer"
-          >
-            Login
-          </button>
-        </form>
-        {message && (
-          <p
-            className={`mt-4 text-center font-medium ${isSuccess ? "text-green-600" : "text-red-600"}`}
-          >
-            {message}
-          </p>
+          {errors.password && (
+            <p className="text-red-500 text-xs mt-1">{errors.password}</p>
+          )}
+        </div>
+
+        <button
+          onClick={handleLogin}
+          className="bg-blue-600 rounded-lg px-3 py-3 w-full font-bold text-white hover:bg-blue-700 cursor-pointer mt-1"
+        >
+          Login
+        </button>
+
+        {errors.general && (
+          <p className="text-red-500 text-sm">{errors.general}</p>
         )}
 
-        <p className="mt-6 text-center text-sm md:text-lg text-gray-600">
+        <p className="text-gray-600 text-sm md:text-base">
           New User?{" "}
           <Link
-            className="text-blue-600 font-semibold hover:underline"
             to="/register"
+            className="text-blue-600 hover:underline font-bold"
           >
-            Start Your Journey
-          </Link>{" "}
-          with us!
+            Register
+          </Link>
         </p>
       </div>
     </div>

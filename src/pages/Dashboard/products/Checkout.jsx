@@ -26,6 +26,7 @@ const Checkout = ({ setShowCard, checkForm, formData }) => {
     dispatch(clearCart());
     setShowCard(false);
   };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 

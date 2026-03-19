@@ -1,55 +1,97 @@
 import React, { useEffect, useState } from "react";
-import { FaCartShopping } from "react-icons/fa6";
 import ProducrCard from "./ProducrCard";
 import ShopingCard from "./ShopingCard";
-import { useSelector } from "react-redux";
 
-const Products = () => {
+const Products = ({ showCart, setShowCart }) => {
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
-  const [showCard, setShowCard] = useState(false);
-  const cart = useSelector((state) => state.cart.cartItems);
+  const [search, setSearch] = useState("");
+  const [activeCategory, setActiveCategory] = useState("ALL");
+  const [loading, setLoading] = useState(true);
 
   const fetchProduct = async () => {
+    setLoading(true);
     const res = await fetch("http://localhost:5000/api/products/get-products");
     const data = await res.json();
-
     setProducts(data.products);
-
-    // unique categories
     setCategories([
+      "ALL",
       ...new Set(data.products.map((item) => item.category.toUpperCase())),
     ]);
+    setLoading(false);
   };
 
   useEffect(() => {
     fetchProduct();
   }, []);
 
+  const filtered = products.filter((p) => {
+    const matchCat =
+      activeCategory === "ALL" ||
+      p.category.toUpperCase() === activeCategory;
+    const matchSearch =
+      p.title.toLowerCase().includes(search.toLowerCase()) ||
+      p.brand.toLowerCase().includes(search.toLowerCase());
+    return matchCat && matchSearch;
+  });
+
+  const groupedByCategory =
+    activeCategory === "ALL"
+      ? categories.filter((c) => c !== "ALL").map((cat) => ({
+          cat,
+          items: filtered.filter(
+            (p) => p.category.toUpperCase() === cat
+          ),
+        }))
+      : [{ cat: activeCategory, items: filtered }];
+
   return (
-    <div className="mb-5 md:m-5">
-      <div className="max-w-6xl mx-auto bg-gray-200 rounded-2xl shadow-xl p-4 md:p-12">
-        <div className="flex justify-between items-center mb-6">
-          <h1 className="font-bold text-xl md:text-4xl">
-            <u>PRODU</u>CTS
-          </h1>
-          <div
-            className="relative flex justify-center"
-            onClick={() => setShowCard(true)}
-          >
-            <button className="cursor-pointer relative">
-              <FaCartShopping size={25} md:size={30} />
-              <p className="text-sm font-bold absolute -top-3 -right-3 bg-red-500 w-5 h-5 items-center leading-5 text-center rounded-full text-white">
-                {cart.length}
-              </p>
-            </button>
+    <div className="max-w-7xl mx-auto px-4 py-6">
+      {/* Search + Filter Bar */}
+      <div className="bg-white rounded-2xl shadow p-4 mb-6">
+        <div className="flex flex-col md:flex-row gap-3 items-center">
+          <div className="relative w-full md:w-96">
+            <i className="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+            <input
+              type="search"
+              placeholder="Search products or brands..."
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              className="w-full pl-9 pr-4 py-2.5 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
+            />
+          </div>
+          <div className="flex gap-2 flex-wrap">
+            {categories.map((cat) => (
+              <button
+                key={cat}
+                onClick={() => setActiveCategory(cat)}
+                className={`px-4 py-2 rounded-xl text-sm font-semibold transition cursor-pointer ${
+                  activeCategory === cat
+                    ? "bg-gray-800 text-white shadow"
+                    : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+                }`}
+              >
+                {cat}
+              </button>
+            ))}
           </div>
         </div>
-        <div>
-          <ProducrCard categories={categories} products={products} />
-        </div>
       </div>
-      {showCard && <ShopingCard setShowCard={setShowCard} />}
+
+      {/* Products */}
+      {loading ? (
+        <div className="flex justify-center items-center py-20">
+          <div className="w-10 h-10 border-4 border-gray-800 border-t-transparent rounded-full animate-spin" />
+        </div>
+      ) : filtered.length === 0 ? (
+        <div className="text-center py-20 text-gray-500 text-lg font-semibold">
+          No products found.
+        </div>
+      ) : (
+        <ProducrCard groupedByCategory={groupedByCategory} />
+      )}
+
+      {showCart && <ShopingCard setShowCard={setShowCart} />}
     </div>
   );
 };

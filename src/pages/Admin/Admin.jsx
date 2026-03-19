@@ -2,7 +2,7 @@ import React, { useContext } from "react";
 import { AuthContext } from "../../auth/AuthContext";
 import Sidebar from "../../components/Sidebar";
 import { Outlet } from "react-router-dom";
-import logo from "../../assets/rklogo-removebg-preview.png";
+import Logo from "../../components/Logo";
 
 const Admin = () => {
   const { user, logout } = useContext(AuthContext);
@@ -11,28 +11,27 @@ const Admin = () => {
     <>
       <div>
         <div className="flex flex-col w-full">
-          <div className="flex flex-col md:flex-row justify-between items-center bg-gray-700 h-16 p-3 shadow-lg border-b-2 border-black gap-4">
-            <div className="flex  md:flex-row items-center justify-between w-full ">
-              <div>
-                <img
-                  src={logo}
-                  alt="Rk logo"
-                  className="h-10 w-20 md:h-14 md:w-28"
-                />
-              </div>
-              <div className="flex gap-3 items-center">
-                <h1 className="font-semibold md:text-2xl text-white">
-                  {user?.username}
-                </h1>
+          <nav className="bg-gray-800 text-white shadow-lg sticky top-0 z-40">
+            <div className="flex justify-between items-center px-4 md:px-8 py-3">
+              <Logo width={130} />
+              <div className="flex items-center gap-3">
+                <div className="flex items-center gap-2 bg-gray-700 px-3 py-2 rounded-lg">
+                  <div className="w-7 h-7 bg-blue-500 rounded-full flex items-center justify-center text-sm font-bold">
+                    {user?.username?.charAt(0).toUpperCase()}
+                  </div>
+                  <span className="text-sm font-semibold hidden md:block">
+                    {user?.username}
+                  </span>
+                </div>
                 <button
                   onClick={logout}
-                  className="bg-white text-red-500 font-semibold p-1 md:px-5 md:py-2 rounded cursor-pointer shadow"
+                  className="bg-red-500 hover:bg-red-600 text-white font-semibold px-4 py-2 rounded-lg transition cursor-pointer text-sm"
                 >
                   Logout
                 </button>
               </div>
             </div>
-          </div>
+          </nav>
           <div className="flex">
             <div>
               <Sidebar />

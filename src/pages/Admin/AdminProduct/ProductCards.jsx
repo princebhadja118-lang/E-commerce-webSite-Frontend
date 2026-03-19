@@ -65,11 +65,11 @@ const ProductCards = ({
   return (
     <div>
       <div
-        className="fixed inset-0 bg-black/50 flex items-center justify-center p-10 md:p-22"
+        className="fixed inset-0 bg-black/80 flex items-center justify-center p-10 md:p-22"
         onClick={() => setPopup(false)}
       >
         <div
-          className="grid grid-cols-1 md:grid-cols-3 pt-10 overflow-y-scroll h-screen "
+          className="grid grid-cols-1 md:grid-cols-3 pt-20 overflow-y-scroll h-screen "
           onClick={(e) => e.stopPropagation()}
         >
           {products

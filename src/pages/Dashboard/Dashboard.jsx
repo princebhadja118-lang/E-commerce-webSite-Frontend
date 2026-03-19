@@ -1,105 +1,140 @@
 import React, { useContext, useState } from "react";
 import { AuthContext } from "../../auth/AuthContext";
-import logo from "../../assets/rklogo-removebg-preview.png";
-import userIcon from "../../assets/profile.png";
+import Logo from "../../components/Logo";
 import Products from "./products/Products";
-import { NavLink } from "react-router-dom";
 import OrdersDetails from "./Order-Details/OrdersDetails";
+import About from "./About";
+import { FaCartShopping, FaBars, FaXmark } from "react-icons/fa6";
+import { useSelector } from "react-redux";
 
 const Dashboard = () => {
-  const { logout } = useContext(AuthContext);
+  const { logout, user } = useContext(AuthContext);
   const [menu, setMenu] = useState(false);
   const [showOrders, setShowOrders] = useState(false);
+  const [activePage, setActivePage] = useState("products");
+  const [showCart, setShowCart] = useState(false);
+  const cart = useSelector((state) => state.cart.cartItems);
+
+  const navLinks = [
+    { label: "Products", key: "products" },
+    // { label: "About", key: "about" },
+  ];
 
   return (
-    <>
-      <div className="min-h-screen bg-gray-100 p-2 md:p-6">
-        <div className=" flex md:flex-row sm:text-sm flex-col justify-between gap-2 items-center bg-gray-700 text-white p-4 rounded border-b-2 border-black shadow-lg transition-all duration-300 ">
-          <div className="flex md:gap-0 w-full justify-between items-center">
-            <img
-              src={logo}
-              alt="Rk logo"
-              className="w-20 h-10 md:w-35 md:h-15 "
-            />
+    <div className="min-h-screen bg-gray-100">
+      {/* Navbar */}
+      <nav className="bg-gray-800 text-white shadow-lg sticky top-0 z-40">
+        <div className="flex justify-between items-center px-4 md:px-8 py-3">
+          {/* Logo */}
+          <Logo width={130} />
+
+          {/* Desktop Nav Links */}
+          <div className="hidden md:flex items-center gap-6 font-semibold">
+            {navLinks.map((link) => (
+              <button
+                key={link.key}
+                onClick={() => setActivePage(link.key)}
+                className={`pb-1 transition border-b-2 ${
+                  activePage === link.key
+                    ? "border-blue-400 text-blue-400"
+                    : "border-transparent hover:text-blue-300"
+                }`}
+              >
+                {link.label}
+              </button>
+            ))}
+          </div>
+
+          {/* Right Side */}
+          <div className="flex items-center gap-3">
+            {/* Cart */}
             <button
-              onClick={() => setMenu((prev) => (!prev ? true : false))}
-              className="flex md:hidden"
+              onClick={() => setShowCart(true)}
+              className="relative cursor-pointer p-2 hover:bg-gray-700 rounded-lg transition"
             >
-              <i className="fa-solid fa-bars"></i>
+              <FaCartShopping size={22} />
+              {cart.length > 0 && (
+                <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs font-bold w-5 h-5 flex items-center justify-center rounded-full">
+                  {cart.length}
+                </span>
+              )}
             </button>
-          </div>
-          <div className="md:flex-row md:flex hidden items-center md:gap-5 ">
-            <div className="bg-gray-300 px-3 flex items-center  w-35 lg:w-full">
-              {/* <i className="fa-solid fa-magnifying-glass text-black"></i>
-              <input
-                type="search"
-                placeholder="Search..."
-                className="px-3 py-2 bg-transparent border-0 outline-0 rounded text-black"
-              /> */}
-            </div>
-            <div className="font-semibold flex gap-4 px-4">
-              <NavLink>Home</NavLink>
-              <NavLink>About</NavLink>
-              <NavLink>Products</NavLink>
-              <NavLink>Contact</NavLink>
-            </div>
-          </div>
-          <div className="md:flex hidden  md:gap-2 items-center shadow py-1 px-2 rounded bg-gray-400 hover:shadow-lg mx-3 ">
+
+            {/* User + Orders */}
             <button
               onClick={() => setShowOrders(true)}
-              className="text-xl text-black font-semibold cursor-pointer rounded-full w-10 h-10"
+              className="hidden md:flex items-center gap-2 bg-gray-700 hover:bg-gray-600 px-3 py-2 rounded-lg transition cursor-pointer"
             >
-              <img src={userIcon} alt="user Icon" />
+              <div className="w-7 h-7 bg-blue-500 rounded-full flex items-center justify-center text-sm font-bold">
+                {user?.username?.charAt(0).toUpperCase()}
+              </div>
+              <span className="text-sm font-semibold">{user?.username}</span>
+            </button>
+
+            <button
+              onClick={logout}
+              className="hidden md:block bg-red-500 hover:bg-red-600 text-white font-semibold px-4 py-2 rounded-lg transition cursor-pointer text-sm"
+            >
+              Logout
+            </button>
+
+            {/* Mobile */}
+            <button
+              onClick={() => setMenu((p) => !p)}
+              className="md:hidden p-2 hover:bg-gray-700 rounded-lg transition cursor-pointer"
+            >
+              {menu ? <FaXmark size={20} /> : <FaBars size={20} />}
+            </button>
+          </div>
+        </div>
+
+        {/* Mobile Menu */}
+        {menu && (
+          <div className="md:hidden bg-gray-700 px-4 pb-4 flex flex-col gap-3">
+            {navLinks.map((link) => (
+              <button
+                key={link.key}
+                onClick={() => {
+                  setActivePage(link.key);
+                  setMenu(false);
+                }}
+                className={`text-left py-2 font-semibold border-b border-gray-600 ${
+                  activePage === link.key ? "text-blue-400" : "text-white"
+                }`}
+              >
+                {link.label}
+              </button>
+            ))}
+            <button
+              onClick={() => {
+                setShowOrders(true);
+                setMenu(false);
+              }}
+              className="text-left py-2 font-semibold text-white border-b border-gray-600"
+            >
+              My Orders ({user?.username})
             </button>
             <button
               onClick={logout}
-              className="bg-white font-bold text-red-500 px-4 py-2 h-10 rounded cursor-pointer"
+              className="bg-red-500 hover:bg-red-600 text-white font-semibold px-4 py-2 rounded-lg transition cursor-pointer text-sm w-full"
             >
               Logout
             </button>
           </div>
+        )}
+      </nav>
 
-          {menu && (
-            <div className="md:hidden">
-              <div className="md:flex-row flex flex-col items-center md:gap-5 transition-all duration-300 ">
-                <div className="bg-gray-300 px-3 flex items-center w-50">
-                  {/* <i className="fa-solid fa-magnifying-glass text-black"></i>
-                  <input
-                    type="search"
-                    placeholder="Search..."
-                    className="px-3 py-2 border-0 outline-0 rounded text-black"
-                  /> */}
-                </div>
-                <div className="font-semibold flex flex-col gap-1 w-full items-center justify-center">
-                  <NavLink>Home</NavLink>
-                  <NavLink>About</NavLink>
-                  <NavLink>Products</NavLink>
-                  <NavLink>Contact</NavLink>
-                </div>
-              </div>
-              <div className="flex flex-col md:flex-row md:gap-3 items-center ">
-                <button
-                  onClick={() => setShowOrders(true)}
-                  className="text-xl text-black font-semibold cursor-pointer rounded-full w-10 h-10 my-1"
-                >
-                  <img src={userIcon} alt="user Icon" />
-                </button>
-                <button
-                  onClick={logout}
-                  className="bg-white font-bold text-red-500 px-4 py-2 h-10 rounded cursor-pointer"
-                >
-                  Logout
-                </button>
-              </div>
-            </div>
-          )}
-        </div>
-        {showOrders && <OrdersDetails setShowOrders={setShowOrders} />}
-        <main className="pt-5">
-          <Products />
-        </main>
-      </div>
-    </>
+      {/* Page Content */}
+      <main>
+        {activePage === "products" ? (
+          <Products showCart={showCart} setShowCart={setShowCart} />
+        ) : (
+          <About />
+        )}
+      </main>
+
+      {showOrders && <OrdersDetails setShowOrders={setShowOrders} />}
+    </div>
   );
 };
 
