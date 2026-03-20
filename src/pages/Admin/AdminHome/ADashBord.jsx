@@ -14,8 +14,12 @@ const ADashBord = () => {
   useEffect(() => {
     Promise.all([
       fetch("http://localhost:5000/api/data").then((res) => res.json()),
-      fetch("http://localhost:5000/api/products/get-products").then((res) => res.json()),
-      fetch("http://localhost:5000/api/orders/all-orders").then((res) => res.json()),
+      fetch("http://localhost:5000/api/products/get-products").then((res) =>
+        res.json(),
+      ),
+      fetch("http://localhost:5000/api/orders/all-orders").then((res) =>
+        res.json(),
+      ),
     ])
       .then(([usersData, productsData, ordersData]) => {
         setUsers(usersData);
@@ -35,7 +39,7 @@ const ADashBord = () => {
   if (loading)
     return (
       <div className="flex justify-center items-center py-20">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+        <div className="animate-spin rounded-full h-12 w-12 border-4 border-t-transparent border-blue-600"></div>
       </div>
     );
 

@@ -27,8 +27,7 @@ const Products = ({ showCart, setShowCart }) => {
 
   const filtered = products.filter((p) => {
     const matchCat =
-      activeCategory === "ALL" ||
-      p.category.toUpperCase() === activeCategory;
+      activeCategory === "ALL" || p.category.toUpperCase() === activeCategory;
     const matchSearch =
       p.title.toLowerCase().includes(search.toLowerCase()) ||
       p.brand.toLowerCase().includes(search.toLowerCase());
@@ -37,12 +36,12 @@ const Products = ({ showCart, setShowCart }) => {
 
   const groupedByCategory =
     activeCategory === "ALL"
-      ? categories.filter((c) => c !== "ALL").map((cat) => ({
-          cat,
-          items: filtered.filter(
-            (p) => p.category.toUpperCase() === cat
-          ),
-        }))
+      ? categories
+          .filter((c) => c !== "ALL")
+          .map((cat) => ({
+            cat,
+            items: filtered.filter((p) => p.category.toUpperCase() === cat),
+          }))
       : [{ cat: activeCategory, items: filtered }];
 
   return (
@@ -80,7 +79,7 @@ const Products = ({ showCart, setShowCart }) => {
 
       {/* Products */}
       {loading ? (
-        <div className="flex justify-center items-center py-20">
+        <div className="flex justify-center items-center py-28">
           <div className="w-10 h-10 border-4 border-gray-800 border-t-transparent rounded-full animate-spin" />
         </div>
       ) : filtered.length === 0 ? (

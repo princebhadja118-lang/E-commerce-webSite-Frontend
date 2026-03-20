@@ -7,6 +7,7 @@ const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState({});
+  const [loading, setLoading] = useState(false);
   const [showpassword, setShowpassword] = useState(false);
 
   const { login } = useContext(AuthContext);
@@ -26,7 +27,8 @@ const Login = () => {
   const handleLogin = async (e) => {
     e.preventDefault();
     setErrors({});
-    if (!validateForm()) return;
+    setLoading(true);
+    if (!validateForm()) return setLoading(false);
     try {
       const res = await fetch("http://localhost:5000/api/login", {
         method: "POST",
@@ -43,11 +45,14 @@ const Login = () => {
         toast.success("Login successful!");
         if (data.user.role === "admin") navigate("/admin/Ahome");
         else navigate("/dashboard");
+        setLoading(false);
       } else {
         setErrors({ general: data.message || "Login failed." });
+        setLoading(false);
       }
     } catch (err) {
       setErrors({ general: "An error occurred during login." });
+      setLoading(false);
     }
   };
 
@@ -125,9 +130,10 @@ const Login = () => {
 
         <button
           onClick={handleLogin}
+          disabled={loading}
           className="bg-blue-600 rounded-lg px-3 py-3 w-full font-bold text-white hover:bg-blue-700 cursor-pointer mt-1"
         >
-          Login
+          {loading ? "Login..." : "Login"}
         </button>
 
         {errors.general && (

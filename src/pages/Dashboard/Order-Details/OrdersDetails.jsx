@@ -8,6 +8,7 @@ const OrdersDetails = ({ setShowOrders }) => {
   const [orders, setOrders] = useState([]);
   const [idProduct, setIdProduct] = useState();
   const [selectedOrder, setSelectedOrder] = useState(false);
+  const [loading, setLoading] = useState(true);
   const { user } = useContext(AuthContext);
 
   const fetchProductById = (id) => {
@@ -15,6 +16,7 @@ const OrdersDetails = ({ setShowOrders }) => {
       .then((res) => res.json())
       .then((data) => {
         setIdProduct(data.product);
+        setLoading(false);
       });
   };
 
@@ -23,10 +25,20 @@ const OrdersDetails = ({ setShowOrders }) => {
       .then((res) => res.json())
       .then((data) => {
         setOrders(data.orders);
-      });
+      })
+      .catch((err) => console.error(err))
+      .finally(() => setLoading(false));
   };
 
   useEffect(() => userOrders(), []);
+
+  if (loading) {
+    return (
+      <div className="fixed inset-0 flex justify-center items-center h-screen w-full bg-black/70">
+        <div className="animate-spin rounded-full h-12 w-12 border-4 border-t-transparent border-white " />
+      </div>
+    );
+  }
 
   return (
     <div>

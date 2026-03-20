@@ -6,6 +6,7 @@ const Register = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showpassword, setShowpassword] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState({});
 
   const navigate = useNavigate();
@@ -18,13 +19,17 @@ const Register = () => {
     else if (!password.trim()) newErrors.password = "Password is required.";
     else if (password.length < 6)
       newErrors.password = "Password must be at least 6 characters.";
+
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
 
   const handleRegister = async () => {
     setErrors({});
-    if (!validateForm()) return;
+
+    setLoading(true);
+
+    if (!validateForm()) return setLoading(false);
     try {
       const res = await fetch("http://localhost:5000/api/register", {
         method: "POST",
@@ -33,12 +38,15 @@ const Register = () => {
       });
       const data = await res.json();
       if (res.ok) {
+        setLoading(false);
         navigate("/login");
       } else {
         setErrors({ general: data.message || "Registration failed." });
+        setLoading(false);
       }
     } catch (error) {
       setErrors({ general: "An error occurred during registration." });
+      setLoading(false);
     }
   };
 
@@ -137,9 +145,10 @@ const Register = () => {
 
         <button
           onClick={handleRegister}
+          disabled={loading}
           className="bg-blue-600 rounded-lg px-3 py-3 w-full font-bold text-white hover:bg-blue-700 cursor-pointer mt-1"
         >
-          Register
+          {loading ? "Registering..." : "Register"}
         </button>
 
         {errors.general && (
