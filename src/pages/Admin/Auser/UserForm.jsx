@@ -3,9 +3,9 @@ import toast from "react-hot-toast";
 import { IoClose } from "react-icons/io5";
 
 const UserForm = ({ setShowForm, selectedUser, refreshUsers }) => {
-  const [username, setUsername] = useState(selectedUser?.username || null);
-  const [email, setEmail] = useState(selectedUser?.email || null);
-  const [role, setRole] = useState(selectedUser?.role || null);
+  const [username, setUsername] = useState(selectedUser?.username || "");
+  const [email, setEmail] = useState(selectedUser?.email || "");
+  const [role, setRole] = useState(selectedUser?.role || "");
   const [errors, setErrors] = useState("");
 
   const handleUpdateData = async () => {
@@ -68,13 +68,14 @@ const UserForm = ({ setShowForm, selectedUser, refreshUsers }) => {
             onChange={(e) => setEmail(e.target.value)}
             className="border px-3 py-3 border-gray-300 rounded-lg w-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
           />
-          <input
-            type="text"
-            placeholder="Role"
+          <select
             value={role}
             onChange={(e) => setRole(e.target.value)}
-            className="border px-3 py-3 border-gray-300 rounded-lg w-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-e-transparent transition "
-          />
+            className="border px-3 py-3 border-gray-300 rounded-lg w-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
+          >
+            <option value="user">user</option>
+            <option value="admin">admin</option>
+          </select>
           <button
             onClick={handleUpdateData}
             className="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white w-full rounded cursor-pointer"

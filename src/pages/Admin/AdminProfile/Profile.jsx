@@ -32,6 +32,11 @@ const Profile = () => {
 
   const handleDelete = async (id) => {
     const admin = JSON.parse(localStorage.getItem("user"));
+    if (admin.id === id) {
+      toast.error("You cannot delete your own account");
+      setDeleteConfirm(null);
+      return;
+    }
     try {
       const res = await fetch(`http://localhost:5000/api/admin/delete/${id}`, {
         method: "DELETE",

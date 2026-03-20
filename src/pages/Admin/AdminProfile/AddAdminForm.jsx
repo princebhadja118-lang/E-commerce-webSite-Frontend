@@ -13,9 +13,9 @@ const AddAdminForm = ({ setAddAdminForm, fectchAdmin }) => {
   const validForm = () => {
     const newErrors = {};
     if (!username.trim()) newErrors.username = "Username is required.";
-    else if (!email.trim()) newErrors.email = "Email is required.";
+    if (!email.trim()) newErrors.email = "Email is required.";
     else if (!/\S+@\S+\.\S+/.test(email)) newErrors.email = "Email is invalid.";
-    else if (!password.trim()) newErrors.password = "Password is required.";
+    if (!password.trim()) newErrors.password = "Password is required.";
     else if (password.length < 6)
       newErrors.password = "Password must be at least 6 characters.";
     setErrors(newErrors);
@@ -26,9 +26,13 @@ const AddAdminForm = ({ setAddAdminForm, fectchAdmin }) => {
     if (!validForm()) return;
 
     try {
+      const admin = JSON.parse(localStorage.getItem("user"));
       const res = await fetch("http://localhost:5000/api/admin/add", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${admin.token}`,
+        },
         body: JSON.stringify({ username, email, password, role: "admin" }),
       });
       const data = await res.json();
@@ -47,7 +51,7 @@ const AddAdminForm = ({ setAddAdminForm, fectchAdmin }) => {
     <div className="fixed inset-0 flex justify-center items-center bg-black/50 h-full w-full p-4 z-40">
       <div className="bg-white p-4 rounded-lg shadow-lg w-md">
         <div className="flex justify-between items-center mb-4">
-          <h2 className="text-xl font-bold">Add User</h2>
+          <h2 className="text-xl font-bold">Add Admin</h2>
           <button
             onClick={() => setAddAdminForm(false)}
             className="cursor-pointer"

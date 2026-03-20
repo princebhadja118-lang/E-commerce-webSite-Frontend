@@ -4,7 +4,7 @@ import Logo from "../components/Logo";
 import { FiArrowRight } from "react-icons/fi";
 
 const Home = () => (
-  <div className="min-h-screen bg-gray-100 flex flex-col items-center justify-center px-6 text-center">
+  <div className="min-h-screen bg-gray-300 flex flex-col items-center justify-center px-6 text-center">
     <Logo width={180} />
     <h1 className="text-4xl md:text-6xl font-extrabold text-gray-800 mt-8 mb-4">
       Shop Smart,{" "}

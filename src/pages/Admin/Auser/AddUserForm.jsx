@@ -13,9 +13,9 @@ const AddUserForm = ({ setAddUserForm, fetchUsers }) => {
   const validForm = () => {
     const newErrors = {};
     if (!username.trim()) newErrors.username = "Username is required.";
-    else if (!email.trim()) newErrors.email = "Email is required.";
+    if (!email.trim()) newErrors.email = "Email is required.";
     else if (!/\S+@\S+\.\S+/.test(email)) newErrors.email = "Email is invalid.";
-    else if (!password.trim()) newErrors.password = "Password is required.";
+    if (!password.trim()) newErrors.password = "Password is required.";
     else if (password.length < 6)
       newErrors.password = "Password must be at least 6 characters.";
     setErrors(newErrors);
@@ -26,9 +26,13 @@ const AddUserForm = ({ setAddUserForm, fetchUsers }) => {
     if (!validForm()) return;
 
     try {
+      const admin = JSON.parse(localStorage.getItem("user"));
       const res = await fetch("http://localhost:5000/api/admin/add", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${admin.token}`,
+        },
         body: JSON.stringify({ username, email, password, role: "user" }),
       });
       const data = await res.json();
