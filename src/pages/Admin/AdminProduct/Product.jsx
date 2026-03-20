@@ -9,8 +9,10 @@ const Product = () => {
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   const fetchProduct = () => {
+    setLoading(true);
     fetch("http://localhost:5000/api/products/get-products")
       .then((res) => res.json())
       .then((data) => {
@@ -18,7 +20,8 @@ const Product = () => {
         setCategories([
           ...new Set(data.products.map((item) => item.category.toUpperCase())),
         ]);
-      });
+      })
+      .finally(() => setLoading(false));
   };
 
   useEffect(() => {
@@ -40,22 +43,30 @@ const Product = () => {
         </button>
       </div>
 
-      {/* Categories Card */}
-      <CategorieCard
-        categories={categories}
-        products={products}
-        setPopup={setPopup}
-        setSelectedCategory={setSelectedCategory}
-      />
+      {loading ? (
+        <div className="flex justify-center items-center py-20">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+        </div>
+      ) : (
+        <>
+          {/* Categories Card */}
+          <CategorieCard
+            categories={categories}
+            products={products}
+            setPopup={setPopup}
+            setSelectedCategory={setSelectedCategory}
+          />
 
-      {/*product Cards */}
-      {Popup && (
-        <ProductCards
-          products={products}
-          selectedCategory={selectedCategory}
-          setPopup={setPopup}
-          refreshProduct={fetchProduct}
-        />
+          {/* Product Cards */}
+          {Popup && (
+            <ProductCards
+              products={products}
+              selectedCategory={selectedCategory}
+              setPopup={setPopup}
+              refreshProduct={fetchProduct}
+            />
+          )}
+        </>
       )}
 
       {/* Add Product Form */}

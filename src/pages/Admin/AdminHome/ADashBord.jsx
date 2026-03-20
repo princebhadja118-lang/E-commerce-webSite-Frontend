@@ -8,19 +8,21 @@ const ADashBord = () => {
   const [users, setUsers] = useState([]);
   const [products, setProducts] = useState([]);
   const [orders, setOrders] = useState([]);
+  const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetch("http://localhost:5000/api/data")
-      .then((res) => res.json())
-      .then((data) => setUsers(data));
-    fetch("http://localhost:5000/api/products/get-products")
-      .then((res) => res.json())
-      .then((data) => setProducts(data.products));
-    fetch("http://localhost:5000/api/orders/all-orders")
-      .then((res) => res.json())
-      .then((data) => setOrders(data.orders || []))
-      .catch(() => {});
+    Promise.all([
+      fetch("http://localhost:5000/api/data").then((res) => res.json()),
+      fetch("http://localhost:5000/api/products/get-products").then((res) => res.json()),
+      fetch("http://localhost:5000/api/orders/all-orders").then((res) => res.json()),
+    ])
+      .then(([usersData, productsData, ordersData]) => {
+        setUsers(usersData);
+        setProducts(productsData.products);
+        setOrders(ordersData.orders || []);
+      })
+      .finally(() => setLoading(false));
   }, []);
 
   const totalUser = users.filter((user) => user.role === "user");
@@ -29,6 +31,13 @@ const ADashBord = () => {
     (acc, order) => acc + (order.totalAmount || 0),
     0,
   );
+
+  if (loading)
+    return (
+      <div className="flex justify-center items-center py-20">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+      </div>
+    );
 
   return (
     <div>
@@ -51,7 +60,7 @@ const ADashBord = () => {
         <div className="flex gap-3 flex-col border-2 w-full pt-4 pb-0 rounded bg-green-500 text-white shadow">
           <div className="flex items-center justify-between px-2">
             <p className="text-2xl md:text-4xl font-semibold">
-              ₹{totalRevenue.toFixed(2)}
+              ₹{totalRevenue}
             </p>
             <FaIndianRupeeSign size={36} className="opacity-80" />
           </div>

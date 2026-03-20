@@ -22,7 +22,9 @@ const AdminOrders = () => {
       </div>
 
       {loading ? (
-        <p className="text-gray-500 p-4">Loading orders...</p>
+        <div className="flex justify-center items-center py-20">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+        </div>
       ) : orders.length === 0 ? (
         <p className="text-gray-500 p-4">No orders found.</p>
       ) : (
