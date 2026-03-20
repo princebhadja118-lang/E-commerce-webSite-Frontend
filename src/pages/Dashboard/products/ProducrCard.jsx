@@ -9,11 +9,6 @@ const ProducrCard = ({ groupedByCategory }) => {
   const cart = useSelector((state) => state.cart.cartItems);
 
   const handleAddToCart = async (productId) => {
-    const alreadyInCart = cart.find((item) => item._id === productId);
-    if (alreadyInCart) {
-      toast.error("Already in cart!");
-      return;
-    }
     const res = await fetch(
       `http://localhost:5000/api/products/add-to-cart/${productId}`,
       {

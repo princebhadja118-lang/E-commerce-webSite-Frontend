@@ -2,17 +2,17 @@ import React, { useState } from "react";
 import toast from "react-hot-toast";
 import { IoClose } from "react-icons/io5";
 
-const UserForm = ({ setShowForm, selectedUser, refreshUsers }) => {
-  const [username, setUsername] = useState(selectedUser?.username || null);
-  const [email, setEmail] = useState(selectedUser?.email || null);
-  const [role, setRole] = useState(selectedUser?.role || null);
-  const [errors, setErrors] = useState("");
+const EditAdminForm = ({ setShowEditForm, selectedAdmin, fectchAdmin }) => {
+  const [username, setUsername] = useState(selectedAdmin?.username || "");
+  const [email, setEmail] = useState(selectedAdmin?.email || "");
+  const [role, setRole] = useState(selectedAdmin?.role || "");
+  const [errors, setErrors] = useState({});
 
   const handleUpdateData = async () => {
     const admin = JSON.parse(localStorage.getItem("user"));
     try {
       const res = await fetch(
-        `http://localhost:5000/api/admin/update/${selectedUser._id}`,
+        `http://localhost:5000/api/admin/update/${selectedAdmin._id}`,
         {
           method: "PUT",
           headers: {
@@ -26,9 +26,9 @@ const UserForm = ({ setShowForm, selectedUser, refreshUsers }) => {
       const data = await res.json();
 
       if (res.ok) {
-        toast.success("User updated successfully");
-        refreshUsers();
-        setShowForm(false);
+        toast.success("Admin updated successfully");
+        fectchAdmin();
+        setShowEditForm(false);
       } else {
         setErrors({ message: data.message || "Failed to Update Profile" });
       }
@@ -38,22 +38,15 @@ const UserForm = ({ setShowForm, selectedUser, refreshUsers }) => {
   };
 
   return (
-    <>
-      <div className="fixed inset-0 bg-black/50 flex justify-center items-center transition-transform ease-in-out z-40">
-        <div className=" w-70 md:w-md flex flex-col gap-2 items-center justify-center p-3 fixed bg-white rounded shadow-2xl">
-          <div className="flex justify-left items-center w-full ">
-            <h1 className="text-xl md:text-3xl font-semibold">
-              Edit User Profile
-            </h1>
-            <div className="absolute flex justify-end items-end w-full pr-5">
-              <button
-                className="cursor-pointer"
-                onClick={() => setShowForm(false)}
-              >
-                <IoClose size={25} md:size={35} />
-              </button>
-            </div>
-          </div>
+    <div className="fixed inset-0 bg-black/50 flex justify-center items-center w-full h-full p-4 z-40">
+      <div className="bg-white p-4 rounded-lg shadow-lg w-md">
+        <div className="flex justify-between items-center px-2 ">
+          <h2 className="text-xl font-bold">Edit Admin</h2>
+          <button onClick={() => setShowEditForm(false)}>
+            <IoClose size={25} />
+          </button>
+        </div>
+        <div className="flex flex-col gap-3 pt-2">
           <input
             type="text"
             placeholder="User Name"
@@ -81,13 +74,13 @@ const UserForm = ({ setShowForm, selectedUser, refreshUsers }) => {
           >
             Update
           </button>
-          {errors.message && (
-            <p className="text-red-500 text-sm">{errors.message}</p>
-          )}
         </div>
+        {errors.message && (
+          <p className="text-red-500 text-sm mt-2">{errors.message}</p>
+        )}
       </div>
-    </>
+    </div>
   );
 };
 
-export default UserForm;
+export default EditAdminForm;

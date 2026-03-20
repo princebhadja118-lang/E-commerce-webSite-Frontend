@@ -36,7 +36,7 @@ const Admin = () => {
             <div>
               <Sidebar />
             </div>
-            <main className="w-full h-screen bg-gray-100 p-4 overflow-x-scroll flex-1">
+            <main className="w-full h-screen bg-gray-100 p-1 md:p-4 overflow-x-scroll flex-1">
               <Outlet />
             </main>
           </div>

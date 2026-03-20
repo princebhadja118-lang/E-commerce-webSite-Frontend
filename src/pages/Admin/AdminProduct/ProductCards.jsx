@@ -65,7 +65,7 @@ const ProductCards = ({
   return (
     <div>
       <div
-        className="fixed inset-0 bg-black/80 flex items-center justify-center p-10 md:p-22"
+        className="fixed inset-0 bg-black/50 flex items-center justify-center p-10 md:p-22 z-40"
         onClick={() => setPopup(false)}
       >
         <div

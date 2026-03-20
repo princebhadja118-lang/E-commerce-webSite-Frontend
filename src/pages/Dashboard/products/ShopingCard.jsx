@@ -5,7 +5,7 @@ import { Elements } from "@stripe/react-stripe-js";
 import { loadStripe } from "@stripe/stripe-js";
 import Checkout from "./Checkout";
 import { useDispatch, useSelector } from "react-redux";
-import { removeFromCart } from "../../../redux/cartSlice";
+import { removeFromCart, updateQuantity } from "../../../redux/cartSlice";
 
 const stripePromise = loadStripe(
   "pk_test_51T9NlOAeER5tBs8aBq48732wCWF3aF13k653f6ygIqc1w2u4As3E4DhRMn2iZdSdckhQHfqNOixc7MysoDfTzTe100LWgXOXEX",
@@ -13,6 +13,7 @@ const stripePromise = loadStripe(
 
 const ShopingCard = ({ setShowCard }) => {
   const [step, setStep] = useState(1);
+
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -27,7 +28,7 @@ const ShopingCard = ({ setShowCard }) => {
 
   const dispatch = useDispatch();
   const cart = useSelector((state) => state.cart.cartItems);
-  const total = cart.reduce((sum, item) => sum + item.price, 0);
+  const total = cart.reduce((sum, item) => sum + item.price * (item.quantity || 1), 0);
 
   const handleForm = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -62,7 +63,7 @@ const ShopingCard = ({ setShowCard }) => {
   const steps = ["Cart", "Address", "Payment"];
 
   return (
-    <div className="fixed inset-0 bg-black/60 z-50 flex justify-end">
+    <div className="fixed inset-0 bg-black/80 z-50 flex justify-end">
       <div className="bg-white w-full max-w-lg h-full flex flex-col shadow-2xl">
         {/* Header */}
         <div className="flex justify-between items-center px-5 py-4 border-b bg-gray-800 text-white">
@@ -129,15 +130,37 @@ const ShopingCard = ({ setShowCard }) => {
                     </p>
                     <p className="text-xs text-gray-400">{item.brand}</p>
                     <p className="text-green-600 font-bold text-sm mt-1">
-                      ₹{item.price}
+                      ₹{item.price * (item.quantity || 1)}
                     </p>
                   </div>
-                  <button
-                    onClick={() => dispatch(removeFromCart(item._id))}
-                    className="text-red-400 hover:text-red-600 p-2 hover:bg-red-50 rounded-lg transition cursor-pointer"
-                  >
-                    <FaTrash size={18} />
-                  </button>
+                  <div className="flex flex-col items-center gap-1">
+                    <div className="flex items-center gap-1">
+                      <button
+                        onClick={() => {
+                          const q = (item.quantity || 1) - 1;
+                          q === 0
+                            ? dispatch(removeFromCart(item._id))
+                            : dispatch(updateQuantity({ id: item._id, quantity: q }));
+                        }}
+                        className="w-7 h-7 rounded-full bg-gray-200 hover:bg-gray-300 font-bold text-gray-700 flex items-center justify-center cursor-pointer"
+                      >
+                        −
+                      </button>
+                      <span className="w-5 text-center text-sm font-semibold">{item.quantity || 1}</span>
+                      <button
+                        onClick={() => dispatch(updateQuantity({ id: item._id, quantity: (item.quantity || 1) + 1 }))}
+                        className="w-7 h-7 rounded-full bg-gray-800 hover:bg-gray-900 text-white font-bold flex items-center justify-center cursor-pointer"
+                      >
+                        +
+                      </button>
+                    </div>
+                    <button
+                      onClick={() => dispatch(removeFromCart(item._id))}
+                      className="text-red-400 hover:text-red-600 p-1 hover:bg-red-50 rounded-lg transition cursor-pointer"
+                    >
+                      <FaTrash size={14} />
+                    </button>
+                  </div>
                 </div>
               ))}
             </div>
@@ -187,13 +210,13 @@ const ShopingCard = ({ setShowCard }) => {
                 {cart.map((item) => (
                   <div
                     key={item._id}
-                    className="flex justify-between text-sm text-gray-600 py-1 border-b border-gray-100 "
+                    className="flex justify-between text-sm text-gray-600 py-1 border-b border-gray-100"
                   >
                     <span className="line-clamp-1 flex-1 pr-2">
-                      {item.title}
+                      {item.title} {item.quantity > 1 && <span className="text-gray-400">x{item.quantity}</span>}
                     </span>
                     <span className="font-semibold text-gray-800">
-                      ₹{item.price}
+                      ₹{item.price * (item.quantity || 1)}
                     </span>
                   </div>
                 ))}

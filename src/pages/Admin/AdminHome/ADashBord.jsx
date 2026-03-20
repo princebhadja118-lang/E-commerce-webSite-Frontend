@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { FaArrowCircleRight } from "react-icons/fa";
+import { FiUsers, FiBox, FiShoppingCart } from "react-icons/fi";
+import { FaIndianRupeeSign } from "react-icons/fa6";
 import { useNavigate } from "react-router-dom";
 
 const ADashBord = () => {
@@ -9,7 +11,7 @@ const ADashBord = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetch("http://localhost:5000/api/users")
+    fetch("http://localhost:5000/api/data")
       .then((res) => res.json())
       .then((data) => setUsers(data));
     fetch("http://localhost:5000/api/products/get-products")
@@ -21,15 +23,23 @@ const ADashBord = () => {
       .catch(() => {});
   }, []);
 
-  const totalRevenue = orders.reduce((acc, order) => acc + (order.totalAmount || 0), 0);
+  const totalUser = users.filter((user) => user.role === "user");
+
+  const totalRevenue = orders.reduce(
+    (acc, order) => acc + (order.totalAmount || 0),
+    0,
+  );
 
   return (
     <div>
       <div className="grid grid-cols-1 md:grid-cols-4 gap-2">
         <div className="flex gap-3 flex-col border-2 w-full pt-4 pb-0 rounded bg-blue-500 text-white shadow-lg">
-          <p className="text-2xl md:text-4xl font-semibold pl-2">
-            {users.length}
-          </p>
+          <div className="flex items-center justify-between px-2">
+            <p className="text-2xl md:text-4xl font-semibold">
+              {totalUser.length}
+            </p>
+            <FiUsers size={36} className="opacity-80" />
+          </div>
           <p className="font-semibold pl-2">Total Users</p>
           <button
             onClick={() => navigate("/admin/user")}
@@ -39,9 +49,12 @@ const ADashBord = () => {
           </button>
         </div>
         <div className="flex gap-3 flex-col border-2 w-full pt-4 pb-0 rounded bg-green-500 text-white shadow">
-          <p className="text-2xl md:text-4xl font-semibold pl-2">
-            ₹{totalRevenue.toFixed(2)}
-          </p>
+          <div className="flex items-center justify-between px-2">
+            <p className="text-2xl md:text-4xl font-semibold">
+              ₹{totalRevenue.toFixed(2)}
+            </p>
+            <FaIndianRupeeSign size={36} className="opacity-80" />
+          </div>
           <p className="font-semibold pl-2">Total Revenue</p>
           <button
             onClick={() => navigate("/admin/orders")}
@@ -51,9 +64,12 @@ const ADashBord = () => {
           </button>
         </div>
         <div className="flex gap-3 flex-col border-2 w-full pt-4 pb-0 rounded bg-red-500 text-white shadow">
-          <p className="text-2xl md:text-4xl font-semibold pl-2">
-            {products.length}
-          </p>
+          <div className="flex items-center justify-between px-2">
+            <p className="text-2xl md:text-4xl font-semibold">
+              {products.length}
+            </p>
+            <FiBox size={36} className="opacity-80" />
+          </div>
           <p className="font-semibold pl-2">Total Products</p>
           <button
             onClick={() => navigate("/admin/product")}
@@ -63,9 +79,12 @@ const ADashBord = () => {
           </button>
         </div>
         <div className="flex gap-3 flex-col border-2 w-full pt-4 pb-0 rounded bg-yellow-500 text-white shadow">
-          <p className="text-2xl md:text-4xl font-semibold pl-2">
-            {orders.length}
-          </p>
+          <div className="flex items-center justify-between px-2">
+            <p className="text-2xl md:text-4xl font-semibold">
+              {orders.length}
+            </p>
+            <FiShoppingCart size={36} className="opacity-80" />
+          </div>
           <p className="font-semibold pl-2">Total Orders</p>
           <button
             onClick={() => navigate("/admin/orders")}

@@ -57,7 +57,7 @@ const ProductAddForm = ({ setShowPopup, fetchProduct }) => {
 
   return (
     <div>
-      <div className="fixed inset-0 bg-black/40 flex items-center justify-center p-5">
+      <div className="fixed inset-0 bg-black/40 flex items-center justify-center p-5 z-40">
         <div className="bg-white p-3 md:p-6 rounded h-fit w-sm flex flex-col gap-3">
           <div className="flex justify-between items-center">
             <h2 className="text-xl font-bold">Add New Product</h2>
