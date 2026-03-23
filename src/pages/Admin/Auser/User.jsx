@@ -76,13 +76,13 @@ const User = () => {
             </span>
           </h1>
           <div className="flex flex-col sm:flex-row items-center gap-2">
-            <div className="flex items-center gap-2 border border-gray-300 rounded-lg px-3 py-1.5 bg-white w-full">
+            <div className="flex items-center gap-2 border border-gray-300 rounded-lg px-3 py-1.5 bg-white w-full md:w-6/3">
               <FiSearch size={14} className="text-gray-400" />
               <input
                 type="search"
                 placeholder="Search..."
                 onChange={(e) => setSearch(e.target.value)}
-                className="outline-none text-sm w-40 text-gray-700 placeholder-gray-400"
+                className="outline-none text-sm w-full text-gray-700 placeholder-gray-400"
               />
             </div>
             <button
