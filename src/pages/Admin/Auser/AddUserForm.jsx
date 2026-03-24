@@ -13,9 +13,9 @@ const AddUserForm = ({ setAddUserForm, fetchUsers }) => {
   const validForm = () => {
     const newErrors = {};
     if (!username.trim()) newErrors.username = "Username is required.";
-    if (!email.trim()) newErrors.email = "Email is required.";
+    else if (!email.trim()) newErrors.email = "Email is required.";
     else if (!/\S+@\S+\.\S+/.test(email)) newErrors.email = "Email is invalid.";
-    if (!password.trim()) newErrors.password = "Password is required.";
+    else if (!password.trim()) newErrors.password = "Password is required.";
     else if (password.length < 6)
       newErrors.password = "Password must be at least 6 characters.";
     setErrors(newErrors);
@@ -95,7 +95,10 @@ const AddUserForm = ({ setAddUserForm, fetchUsers }) => {
                 onChange={(e) => setPassword(e.target.value)}
                 className="outline-none"
               />
-              <button onClick={() => setshowPass(!showPass)}>
+              <button
+                onClick={() => setshowPass(!showPass)}
+                className="cursor-pointer"
+              >
                 {showPass ? <IoEyeOff size={20} /> : <IoEye size={20} />}
               </button>
             </div>
@@ -106,7 +109,7 @@ const AddUserForm = ({ setAddUserForm, fetchUsers }) => {
 
           <button
             onClick={handleAddUser}
-            className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 focus:outline-none w-full"
+            className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 focus:outline-none w-full cursor-pointer"
           >
             Add
           </button>

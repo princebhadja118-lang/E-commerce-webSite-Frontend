@@ -1,23 +1,40 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../../auth/AuthContext";
 import Logo from "../../components/Logo";
 import Products from "./products/Products";
 import OrdersDetails from "./Order-Details/OrdersDetails";
-import About from "./About";
-import { FaCartShopping, FaBars, FaXmark } from "react-icons/fa6";
-import { useSelector } from "react-redux";
+import Wishlist from "./Wishlist";
+import { FaCartShopping, FaBars, FaXmark, FaHeart } from "react-icons/fa6";
+import { useDispatch, useSelector } from "react-redux";
+import { setWishlist } from "../../redux/wishlistSlice";
 
 const Dashboard = () => {
   const { logout, user } = useContext(AuthContext);
+  const dispatch = useDispatch();
   const [menu, setMenu] = useState(false);
   const [showOrders, setShowOrders] = useState(false);
   const [activePage, setActivePage] = useState("products");
   const [showCart, setShowCart] = useState(false);
   const cart = useSelector((state) => state.cart.cartItems);
+  const wishlist = useSelector((state) => state.wishlist.wishlistItems);
+
+  useEffect(() => {
+    const fetchWishlist = async () => {
+      try {
+        const res = await fetch("http://localhost:5000/api/wishlist/get", {
+          headers: { Authorization: `Bearer ${user.token}` },
+        });
+        const data = await res.json();
+        if (data.success) dispatch(setWishlist(data.wishlist));
+      } catch (err) {}
+    };
+    fetchWishlist();
+  }, [user, dispatch]);
 
   const navLinks = [
-    { label: "Products", key: "products" },
-    // { label: "About", key: "about" },
+    { key: "about", label: "About" },
+    { key: "products", label: "Products" },
+    { key: "wishlist", label: "Wishlist" },
   ];
 
   return (
@@ -47,6 +64,19 @@ const Dashboard = () => {
 
           {/* Right Side */}
           <div className="flex items-center gap-3">
+            {/* Wishlist */}
+            <button
+              onClick={() => setActivePage("wishlist")}
+              className="relative cursor-pointer p-2 hover:bg-gray-700 rounded-lg transition"
+            >
+              <FaHeart size={22} />
+              {wishlist.length > 0 && (
+                <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs font-bold w-5 h-5 flex items-center justify-center rounded-full">
+                  {wishlist.length}
+                </span>
+              )}
+            </button>
+
             {/* Cart */}
             <button
               onClick={() => setShowCart(true)}
@@ -129,7 +159,7 @@ const Dashboard = () => {
         {activePage === "products" ? (
           <Products showCart={showCart} setShowCart={setShowCart} />
         ) : (
-          <About />
+          <Wishlist />
         )}
       </main>
 

@@ -10,6 +10,7 @@ const ProductAddForm = ({ setShowPopup, fetchProduct }) => {
     discount: "",
     img: "",
     category: "",
+    stock: "",
   });
   const [error, setError] = useState({
     title: "",
@@ -17,16 +18,26 @@ const ProductAddForm = ({ setShowPopup, fetchProduct }) => {
     price: "",
     img: "",
     category: "",
+    stock: "",
   });
 
   const handleAddProduct = async () => {
-    const newError = { title: "", brand: "", price: "", img: "", category: "" };
+    const newError = {
+      title: "",
+      brand: "",
+      price: "",
+      img: "",
+      category: "",
+      stock: "",
+    };
 
     if (!form.title.trim()) newError.title = "Title is required";
     else if (!form.brand.trim()) newError.brand = "Brand is required";
     else if (!form.price.trim()) newError.price = "Price is required";
     else if (!form.img.trim()) newError.img = "Image is required";
     else if (!form.category.trim()) newError.category = "Category is required";
+    else if (!String(form.stock).trim() || isNaN(form.stock))
+      newError.stock = "Stock is required";
 
     setError(newError);
 
@@ -51,6 +62,7 @@ const ProductAddForm = ({ setShowPopup, fetchProduct }) => {
       discount: "",
       img: "",
       category: "",
+      stock: "",
     });
     setShowPopup(false);
   };
@@ -116,17 +128,25 @@ const ProductAddForm = ({ setShowPopup, fetchProduct }) => {
             className="border p-2 rounded"
           />
           {error.category && <p className="text-red-500">{error.category}</p>}
+          <input
+            type="number"
+            placeholder="Stock Quantity"
+            value={form.stock}
+            onChange={(e) => setForm({ ...form, stock: e.target.value })}
+            className="border p-2 rounded"
+          />
+          {error.stock && <p className="text-red-500">{error.stock}</p>}
           <div className="flex gap-3">
             <button
               onClick={handleAddProduct}
-              className="bg-green-600 text-white px-4 py-2 rounded w-full"
+              className="bg-green-600 text-white px-4 py-2 rounded w-full cursor-pointer"
             >
               Confirm
             </button>
 
             <button
               onClick={() => setShowPopup(false)}
-              className="bg-red-600 text-white px-4 py-2 rounded w-full"
+              className="bg-red-600 text-white px-4 py-2 rounded w-full cursor-pointer"
             >
               Cancel
             </button>

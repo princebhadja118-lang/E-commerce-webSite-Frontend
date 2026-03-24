@@ -7,9 +7,7 @@ import Checkout from "./Checkout";
 import { useDispatch, useSelector } from "react-redux";
 import { removeFromCart, updateQuantity } from "../../../redux/cartSlice";
 
-const stripePromise = loadStripe(
-  "pk_test_51T9NlOAeER5tBs8aBq48732wCWF3aF13k653f6ygIqc1w2u4As3E4DhRMn2iZdSdckhQHfqNOixc7MysoDfTzTe100LWgXOXEX",
-);
+const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY);
 
 const ShopingCard = ({ setShowCard }) => {
   const [step, setStep] = useState(1);
@@ -28,7 +26,10 @@ const ShopingCard = ({ setShowCard }) => {
 
   const dispatch = useDispatch();
   const cart = useSelector((state) => state.cart.cartItems);
-  const total = cart.reduce((sum, item) => sum + item.price * (item.quantity || 1), 0);
+  const total = cart.reduce(
+    (sum, item) => sum + item.price * (item.quantity || 1),
+    0,
+  );
 
   const handleForm = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -140,16 +141,30 @@ const ShopingCard = ({ setShowCard }) => {
                           const q = (item.quantity || 1) - 1;
                           q === 0
                             ? dispatch(removeFromCart(item._id))
-                            : dispatch(updateQuantity({ id: item._id, quantity: q }));
+                            : dispatch(
+                                updateQuantity({ id: item._id, quantity: q }),
+                              );
                         }}
                         className="w-7 h-7 rounded-full bg-gray-200 hover:bg-gray-300 font-bold text-gray-700 flex items-center justify-center cursor-pointer"
                       >
                         −
                       </button>
-                      <span className="w-5 text-center text-sm font-semibold">{item.quantity || 1}</span>
+                      <span className="w-5 text-center text-sm font-semibold">
+                        {item.quantity || 1}
+                      </span>
                       <button
-                        onClick={() => dispatch(updateQuantity({ id: item._id, quantity: (item.quantity || 1) + 1 }))}
-                        className="w-7 h-7 rounded-full bg-gray-800 hover:bg-gray-900 text-white font-bold flex items-center justify-center cursor-pointer"
+                        onClick={() =>
+                          dispatch(
+                            updateQuantity({
+                              id: item._id,
+                              quantity: (item.quantity || 1) + 1,
+                            }),
+                          )
+                        }
+                        disabled={
+                          (item.quantity || 1) >= (item.stock ?? Infinity)
+                        }
+                        className="w-7 h-7 rounded-full bg-gray-800 hover:bg-gray-900 text-white font-bold flex items-center justify-center cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed"
                       >
                         +
                       </button>
@@ -213,7 +228,10 @@ const ShopingCard = ({ setShowCard }) => {
                     className="flex justify-between text-sm text-gray-600 py-1 border-b border-gray-100"
                   >
                     <span className="line-clamp-1 flex-1 pr-2">
-                      {item.title} {item.quantity > 1 && <span className="text-gray-400">x{item.quantity}</span>}
+                      {item.title}{" "}
+                      {item.quantity > 1 && (
+                        <span className="text-gray-400">x{item.quantity}</span>
+                      )}
                     </span>
                     <span className="font-semibold text-gray-800">
                       ₹{item.price * (item.quantity || 1)}

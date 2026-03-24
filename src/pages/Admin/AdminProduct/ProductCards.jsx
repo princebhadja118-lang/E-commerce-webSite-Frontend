@@ -17,6 +17,7 @@ const ProductCards = ({
     discount: "",
     img: "",
     category: "",
+    stock: "",
   });
 
   const handleDelete = async (productId) => {
@@ -112,6 +113,11 @@ const ProductCards = ({
                         </span>
                       )}
                     </code>
+                    <p
+                      className={`text-sm font-semibold mb-2 ${product.stock === 0 ? "text-red-500" : "text-gray-500"}`}
+                    >
+                      Stock: {product.stock ?? 0}
+                    </p>
                     <div className="flex gap-2">
                       <button
                         onClick={() => {
@@ -203,17 +209,26 @@ const ProductCards = ({
                     }
                     className="border p-2 rounded"
                   />
+                  <input
+                    type="number"
+                    placeholder="Stock Quantity"
+                    value={form.stock ?? ""}
+                    onChange={(e) =>
+                      setForm({ ...form, stock: e.target.value })
+                    }
+                    className="border p-2 rounded"
+                  />
                   <div className="flex gap-3">
                     <button
                       onClick={handleEdit}
-                      className="bg-green-600 text-white px-4 py-2 rounded w-full"
+                      className="bg-green-600 text-white px-4 py-2 rounded w-full cursor-pointer"
                     >
                       Update
                     </button>
 
                     <button
                       onClick={() => setShowEditForm(false)}
-                      className="bg-red-600 text-white px-4 py-2 rounded w-full"
+                      className="bg-red-600 text-white px-4 py-2 rounded w-full cursor-pointer"
                     >
                       Cancel
                     </button>

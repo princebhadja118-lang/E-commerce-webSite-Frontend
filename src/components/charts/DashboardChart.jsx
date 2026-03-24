@@ -43,20 +43,22 @@ const DashboardChart = ({ data = [] }) => {
           <Tooltip />
           <Legend />
 
-          <Area dataKey="users" fill="#ffc658" stroke="#ffc658" />
+          <Bar dataKey="users" fill="#ffc658" stroke="#ffc658" />
         </ComposedChart>
       </ResponsiveContainer>
+
       {/* Revenue */}
       <ResponsiveContainer width="100%" height={350}>
         <ComposedChart data={formatted}>
           <XAxis dataKey="month" />
-          <YAxis />
+          <YAxis width={80} />
           <Tooltip />
           <Legend />
 
           <Line type="monotone" dataKey="revenue" stroke="#8884d8" />
         </ComposedChart>
       </ResponsiveContainer>
+
       {/* Orders */}
       <ResponsiveContainer width="100%" height={350}>
         <ComposedChart data={formatted}>

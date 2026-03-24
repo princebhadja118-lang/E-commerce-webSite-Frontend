@@ -56,69 +56,75 @@ const OrdersDetails = ({ setShowOrders }) => {
               <IoClose size={25} />
             </button>
           </div>
-          <div className="h-90 md:h-full md:max-h-100 overflow-y-scroll">
-            {orders.map((order) => (
-              <ul
-                key={order._id}
-                className="flex bg-white shadow justify-between items-center mb-4 py-2 rounded "
-              >
-                <ul className="w-full">
-                  <div className="flex flex-col md:flex-row justify-between items-start md:items-center md:px-2 py-1">
-                    <div className="flex gap-1">
-                      <li className="font-semibold">Order# </li>
-                      <li>{order._id}</li>
+          {orders.length === 0 ? (
+            <p className="text-gray-500">No order Available.</p>
+          ) : (
+            <div className="h-90 md:h-full md:max-h-100 overflow-y-scroll">
+              {orders.map((order) => (
+                <ul
+                  key={order._id}
+                  className="flex bg-white shadow justify-between items-center mb-4 py-2 rounded "
+                >
+                  <ul className="w-full">
+                    <div className="flex flex-col md:flex-row justify-between items-start md:items-center md:px-2 py-1">
+                      <div className="flex gap-1">
+                        <li className="font-semibold">Order# </li>
+                        <li>{order._id}</li>
+                      </div>
+                      <div className="flex gap-1 items-center">
+                        <li className="font-semibold">TotalAmount:</li>
+                        <li>₹{order.totalAmount}</li>
+                      </div>
                     </div>
-                    <div className="flex gap-1 items-center">
-                      <li className="font-semibold">TotalAmount:</li>
-                      <li>₹{order.totalAmount}</li>
-                    </div>
-                  </div>
-                  <div className="flex flex-col pt-3 md:pt-0 gap-2">
-                    {order.products.map((product) => (
-                      <span
-                        key={product._id}
-                        onClick={() => {
-                          fetchProductById(product._id) ||
-                            setSelectedOrder(true);
-                        }}
-                        className="w-full border-t border-gray-300 py-2 cursor-pointer"
-                      >
-                        <div className="flex flex-col md:flex-row items-center justify-between w-full gap-2 py-1">
-                          <div className="flex items-center justify-center md:justify-center md:items-start px-2">
-                            <img
-                              src={product.img}
-                              alt={product.title}
-                              className="h-16 w-16 object-contain"
-                            />
-                            <div className="flex flex-col justify-center items-start h-full px-2 py-1.5">
-                              <li className="text-xl font-semibold">
-                                {product.title}
+                    <div className="flex flex-col pt-3 md:pt-0 gap-2">
+                      {order.products.map((product) => (
+                        <span
+                          key={product._id}
+                          onClick={() => {
+                            fetchProductById(product._id) ||
+                              setSelectedOrder(true);
+                          }}
+                          className="w-full border-t border-gray-300 py-2 cursor-pointer"
+                        >
+                          <div className="flex flex-col md:flex-row items-center justify-between w-full gap-2 py-1">
+                            <div className="flex items-center justify-center md:justify-center md:items-start px-2">
+                              <img
+                                src={product.img}
+                                alt={product.title}
+                                className="h-16 w-16 object-contain"
+                              />
+                              <div className="flex flex-col justify-center items-start h-full px-2 py-1.5">
+                                <li className="text-xl font-semibold">
+                                  {product.title}
+                                </li>
+                                <li>
+                                  Placed on:{" "}
+                                  {new Date(
+                                    order.date,
+                                  ).toLocaleDateString()}{" "}
+                                </li>
+                              </div>
+                            </div>
+                            <div className="flex flex-col items-center justify-center py-1.5 px-2">
+                              <li className="text-lg font-semibold text-gray-700">
+                                ₹{product.price.toFixed(2)}
                               </li>
                               <li>
-                                Placed on:{" "}
-                                {new Date(order.date).toLocaleDateString()}{" "}
+                                <DeliveryStatus
+                                  date={order.date}
+                                  time={order.time}
+                                />
                               </li>
                             </div>
                           </div>
-                          <div className="flex flex-col items-center justify-center py-1.5 px-2">
-                            <li className="text-lg font-semibold text-gray-700">
-                              ₹{product.price.toFixed(2)}
-                            </li>
-                            <li>
-                              <DeliveryStatus
-                                date={order.date}
-                                time={order.time}
-                              />
-                            </li>
-                          </div>
-                        </div>
-                      </span>
-                    ))}
-                  </div>
+                        </span>
+                      ))}
+                    </div>
+                  </ul>
                 </ul>
-              </ul>
-            ))}
-          </div>
+              ))}
+            </div>
+          )}
           <div>
             {selectedOrder && (
               <OrderCard

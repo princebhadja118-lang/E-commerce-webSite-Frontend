@@ -1,12 +1,19 @@
-import React from "react";
+import React, { useContext } from "react";
 import toast from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
 import { addToCart } from "../../../redux/cartSlice";
-import { FaCartShopping } from "react-icons/fa6";
+import {
+  addToWishlist,
+  removeFromWishlist,
+} from "../../../redux/wishlistSlice";
+import { FaCartShopping, FaHeart, FaRegHeart } from "react-icons/fa6";
+import { AuthContext } from "../../../auth/AuthContext";
 
 const ProducrCard = ({ groupedByCategory }) => {
   const dispatch = useDispatch();
+  const { user } = useContext(AuthContext);
   const cart = useSelector((state) => state.cart.cartItems);
+  const wishlist = useSelector((state) => state.wishlist.wishlistItems);
 
   const handleAddToCart = async (productId) => {
     const res = await fetch(
@@ -20,7 +27,48 @@ const ProducrCard = ({ groupedByCategory }) => {
     if (res.ok) {
       const data = await res.json();
       dispatch(addToCart(data.product));
+      console.log(data.product);
+
       toast.success("Added to cart!");
+    } else {
+      const data = await res.json();
+      toast.error(data.message || "Failed to add to cart");
+    }
+  };
+
+  const handleWishlist = async (product) => {
+    const inWishlist = wishlist.find((i) => i._id === product._id);
+    if (inWishlist) {
+      const res = await fetch(
+        `http://localhost:5000/api/wishlist/remove/${product._id}`,
+        {
+          method: "DELETE",
+          headers: { Authorization: `Bearer ${user.token}` },
+        },
+      );
+      if (res.ok) {
+        dispatch(removeFromWishlist(product._id));
+        toast.success("Removed from wishlist");
+      } else {
+        const data = await res.json();
+        toast.error(data.message || "Failed to remove");
+      }
+    } else {
+      const res = await fetch("http://localhost:5000/api/wishlist/add", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${user.token}`,
+        },
+        body: JSON.stringify({ productId: product._id }),
+      });
+      const data = await res.json();
+      if (res.ok) {
+        dispatch(addToWishlist(product));
+        toast.success("Added to wishlist!");
+      } else {
+        toast.error(data.message || "Failed to add to wishlist");
+      }
     }
   };
 
@@ -44,6 +92,8 @@ const ProducrCard = ({ groupedByCategory }) => {
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
               {items.map((product) => {
                 const inCart = cart.find((i) => i._id === product._id);
+                const inWishlist = wishlist.find((i) => i._id === product._id);
+                const outOfStock = product.stock === 0;
                 const originalPrice =
                   product.discount > 0
                     ? Math.floor(product.price / (1 - product.discount / 100))
@@ -59,6 +109,21 @@ const ProducrCard = ({ groupedByCategory }) => {
                       {product.discount > 0 && (
                         <span className="absolute top-2 left-2 bg-red-500 text-white text-xs font-bold px-2 py-0.5 rounded-full">
                           -{product.discount}%
+                        </span>
+                      )}
+                      <button
+                        onClick={() => handleWishlist(product)}
+                        className="absolute top-2 right-2 text-red-500 hover:scale-110 transition cursor-pointer z-10"
+                      >
+                        {inWishlist ? (
+                          <FaHeart size={18} />
+                        ) : (
+                          <FaRegHeart size={18} />
+                        )}
+                      </button>
+                      {outOfStock && (
+                        <span className="absolute bottom-2 left-2 bg-gray-500 text-white text-xs font-bold px-2 py-0.5 rounded-full">
+                          Out of Stock
                         </span>
                       )}
                       <img
@@ -91,15 +156,21 @@ const ProducrCard = ({ groupedByCategory }) => {
 
                         <button
                           onClick={() => handleAddToCart(product._id)}
-                          disabled={!!inCart}
+                          disabled={!!inCart || outOfStock}
                           className={`mt-2 w-full flex items-center justify-center gap-2 py-2 rounded-xl text-sm font-semibold transition cursor-pointer ${
-                            inCart
-                              ? "bg-green-100 text-green-700 cursor-default"
-                              : "bg-gray-800 hover:bg-gray-900 text-white"
+                            outOfStock
+                              ? "bg-gray-200 text-gray-400 cursor-not-allowed"
+                              : inCart
+                                ? "bg-green-100 text-green-700 cursor-default"
+                                : "bg-gray-800 hover:bg-gray-900 text-white"
                           }`}
                         >
                           <FaCartShopping size={14} />
-                          {inCart ? "In Cart" : "Add to Cart"}
+                          {outOfStock
+                            ? "Out of Stock"
+                            : inCart
+                              ? "In Cart"
+                              : "Add to Cart"}
                         </button>
                       </div>
                     </div>

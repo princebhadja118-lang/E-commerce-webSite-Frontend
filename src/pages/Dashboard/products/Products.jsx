@@ -59,7 +59,7 @@ const Products = ({ showCart, setShowCart }) => {
               className="w-full pl-9 pr-4 py-2.5 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
             />
           </div>
-          <div className="flex gap-2 flex-wrap">
+          <div className="flex overflow-x-scroll w-full gap-2 ">
             {categories.map((cat) => (
               <button
                 key={cat}
