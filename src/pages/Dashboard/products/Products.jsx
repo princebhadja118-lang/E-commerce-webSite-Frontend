@@ -90,7 +90,7 @@ const Products = ({ showCart, setShowCart }) => {
         <ProducrCard groupedByCategory={groupedByCategory} />
       )}
 
-      {showCart && <ShopingCard setShowCard={setShowCart} />}
+      {showCart && <ShopingCard setShowCart={setShowCart} />}
     </div>
   );
 };

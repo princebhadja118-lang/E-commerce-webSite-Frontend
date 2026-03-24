@@ -106,7 +106,7 @@ const ShopingCard = ({ setShowCart }) => {
               <i className="fa-solid fa-cart-shopping text-6xl" />
               <p className="text-lg font-semibold">Your cart is empty</p>
               <button
-                onClick={() => setShowCard(false)}
+                onClick={() => setShowCart(false)}
                 className="bg-gray-800 text-white px-6 py-2 rounded-xl font-semibold hover:bg-gray-900 cursor-pointer"
               >
                 Continue Shopping
@@ -245,7 +245,7 @@ const ShopingCard = ({ setShowCart }) => {
               </div>
               <Elements stripe={stripePromise}>
                 <Checkout
-                  setShowCard={setShowCard}
+                  setShowCart={setShowCart}
                   checkForm={() => true}
                   formData={formData}
                 />

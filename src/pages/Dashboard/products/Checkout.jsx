@@ -5,7 +5,7 @@ import { clearCart } from "../../../redux/cartSlice";
 import { useContext, useState } from "react";
 import { AuthContext } from "../../../auth/AuthContext";
 
-const Checkout = ({ setShowCard, checkForm, formData }) => {
+const Checkout = ({ setShowCart, checkForm, formData }) => {
   const [OrderTime] = useState(() => Math.floor(Math.random() * 30) + 10);
   const stripe = useStripe();
   const elements = useElements();
@@ -24,7 +24,7 @@ const Checkout = ({ setShowCard, checkForm, formData }) => {
     toast.success(`Estimated Delivery Time: ${OrderTime} minutes`);
     setOrderTimePopup(false);
     dispatch(clearCart());
-    setShowCard(false);
+    setShowCart(false);
   };
 
   const handleSubmit = async (e) => {
