@@ -43,10 +43,10 @@ const OrdersDetails = ({ setShowOrders }) => {
   return (
     <div>
       <div
-        className="fixed inset-0 flex justify-center items-center w-full h-full bg-black/70 z-50 p-4 "
+        className="fixed inset-0 flex justify-center items-center md:h-full w-full bg-black/70 z-50 p-4"
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="w-2xl bg-gray-50 p-3 rounded ">
+        <div className="w-2xl bg-white p-3 rounded">
           <div className="flex justify-between items-center mb-4">
             <h2 className="font-bold text-lg">Orders Summary</h2>
             <button

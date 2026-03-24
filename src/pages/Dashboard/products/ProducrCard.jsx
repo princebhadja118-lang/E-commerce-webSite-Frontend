@@ -121,11 +121,7 @@ const ProducrCard = ({ groupedByCategory }) => {
                           <FaRegHeart size={18} />
                         )}
                       </button>
-                      {outOfStock && (
-                        <span className="absolute bottom-2 left-2 bg-gray-500 text-white text-xs font-bold px-2 py-0.5 rounded-full">
-                          Out of Stock
-                        </span>
-                      )}
+
                       <img
                         src={product.img}
                         alt={product.title}
@@ -159,7 +155,7 @@ const ProducrCard = ({ groupedByCategory }) => {
                           disabled={!!inCart || outOfStock}
                           className={`mt-2 w-full flex items-center justify-center gap-2 py-2 rounded-xl text-sm font-semibold transition cursor-pointer ${
                             outOfStock
-                              ? "bg-gray-200 text-gray-400 cursor-not-allowed"
+                              ? "bg-gray-200 text-gray-400 disabled:cursor-not-allowed"
                               : inCart
                                 ? "bg-green-100 text-green-700 cursor-default"
                                 : "bg-gray-800 hover:bg-gray-900 text-white"

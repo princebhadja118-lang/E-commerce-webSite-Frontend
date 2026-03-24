@@ -9,7 +9,7 @@ import { removeFromCart, updateQuantity } from "../../../redux/cartSlice";
 
 const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY);
 
-const ShopingCard = ({ setShowCard }) => {
+const ShopingCard = ({ setShowCart }) => {
   const [step, setStep] = useState(1);
 
   const [formData, setFormData] = useState({
@@ -73,7 +73,7 @@ const ShopingCard = ({ setShowCard }) => {
             <p className="text-xs text-gray-300">{cart.length} item(s)</p>
           </div>
           <button
-            onClick={() => setShowCard(false)}
+            onClick={() => setShowCart(false)}
             className="hover:bg-gray-700 p-1 rounded cursor-pointer"
           >
             <IoClose size={24} />
@@ -147,7 +147,7 @@ const ShopingCard = ({ setShowCard }) => {
                         }}
                         className="w-7 h-7 rounded-full bg-gray-200 hover:bg-gray-300 font-bold text-gray-700 flex items-center justify-center cursor-pointer"
                       >
-                        −
+                        <i class="fa-solid fa-minus"></i>
                       </button>
                       <span className="w-5 text-center text-sm font-semibold">
                         {item.quantity || 1}
@@ -164,9 +164,9 @@ const ShopingCard = ({ setShowCard }) => {
                         disabled={
                           (item.quantity || 1) >= (item.stock ?? Infinity)
                         }
-                        className="w-7 h-7 rounded-full bg-gray-800 hover:bg-gray-900 text-white font-bold flex items-center justify-center cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed"
+                        className="h-7 w-7 rounded-full bg-gray-800 hover:bg-gray-900 text-white font-bold flex items-center justify-center cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed"
                       >
-                        +
+                        <i class="fa-solid fa-plus"></i>
                       </button>
                     </div>
                     <button
