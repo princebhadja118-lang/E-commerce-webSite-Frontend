@@ -64,7 +64,7 @@ const ShopingCard = ({ setShowCart }) => {
   const steps = ["Cart", "Address", "Payment"];
 
   return (
-    <div className="fixed inset-0 bg-black/80 z-50 flex justify-end">
+    <div className="fixed inset-0 bg-black/80 z-100 flex justify-end">
       <div className="bg-white w-full max-w-lg h-full flex flex-col shadow-2xl">
         {/* Header */}
         <div className="flex justify-between items-center px-5 py-4 border-b bg-gray-800 text-white">
@@ -166,7 +166,7 @@ const ShopingCard = ({ setShowCart }) => {
                         }
                         className="h-7 w-7 rounded-full bg-gray-800 hover:bg-gray-900 text-white font-bold flex items-center justify-center cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed"
                       >
-                        <i class="fa-solid fa-plus"></i>
+                        <i className="fa-solid fa-plus"></i>
                       </button>
                     </div>
                     <button

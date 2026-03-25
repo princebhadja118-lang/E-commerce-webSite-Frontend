@@ -27,8 +27,6 @@ const ProducrCard = ({ groupedByCategory }) => {
     if (res.ok) {
       const data = await res.json();
       dispatch(addToCart(data.product));
-      console.log(data.product);
-
       toast.success("Added to cart!");
     } else {
       const data = await res.json();
@@ -113,7 +111,7 @@ const ProducrCard = ({ groupedByCategory }) => {
                       )}
                       <button
                         onClick={() => handleWishlist(product)}
-                        className="absolute top-2 right-2 text-red-500 hover:scale-110 transition cursor-pointer z-10"
+                        className="absolute top-2 right-2 text-red-500 hover:scale-110 transition cursor-pointer z-50"
                       >
                         {inWishlist ? (
                           <FaHeart size={18} />

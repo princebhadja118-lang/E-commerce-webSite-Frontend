@@ -56,7 +56,7 @@ const Dashboard = () => {
     <>
       <div className="min-h-screen bg-gray-100">
         {/* Navbar */}
-        <nav className="bg-gray-800 text-white shadow-lg sticky top-0 z-40">
+        <nav className="bg-gray-800 text-white shadow-lg sticky top-0 z-90">
           <div className="flex justify-between items-center px-4 md:px-8 py-3">
             {/* Logo */}
             <Logo width={130} />

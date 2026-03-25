@@ -34,7 +34,7 @@ const OrdersDetails = ({ setShowOrders }) => {
 
   if (loading) {
     return (
-      <div className="fixed inset-0 flex justify-center items-center h-screen w-full bg-black/70">
+      <div className="fixed inset-0 flex justify-center items-center h-screen w-full bg-black/70 z-50">
         <div className="animate-spin rounded-full h-12 w-12 border-4 border-t-transparent border-white " />
       </div>
     );
