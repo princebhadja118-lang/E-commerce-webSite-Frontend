@@ -12,7 +12,7 @@ const UserForm = ({ setShowForm, selectedUser, refreshUsers }) => {
     const admin = JSON.parse(localStorage.getItem("user"));
     try {
       const res = await fetch(
-        `http://localhost:5000/api/admin/update/${selectedUser._id}`,
+        `http://localhost:5000/api/admin/users/${selectedUser._id}`,
         {
           method: "PUT",
           headers: {

@@ -45,11 +45,13 @@ const ProductAddForm = ({ setShowPopup, fetchProduct }) => {
       return;
     }
 
-    await fetch("http://localhost:5000/api/products/add-product", {
+    const admin = JSON.parse(localStorage.getItem("user"));
+    await fetch("http://localhost:5000/api/admin/products", {
       method: "POST",
 
       headers: {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${admin?.token}`,
       },
       body: JSON.stringify(form),
     });

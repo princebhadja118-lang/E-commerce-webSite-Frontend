@@ -6,7 +6,7 @@ const AdminOrders = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch("http://localhost:5000/api/orders/all-orders")
+    fetch("http://localhost:5000/api/admin/orders/")
       .then((res) => res.json())
       .then((data) => setOrders(data.orders || []))
       .catch(() => setOrders([]))

@@ -9,7 +9,7 @@ import {
 import { FaCartShopping, FaHeart, FaRegHeart } from "react-icons/fa6";
 import { AuthContext } from "../../../auth/AuthContext";
 
-const ProducrCard = ({ groupedByCategory }) => {
+const ProducrCard = ({ filterByAll }) => {
   const dispatch = useDispatch();
   const { user } = useContext(AuthContext);
   const cart = useSelector((state) => state.cart.cartItems);
@@ -71,14 +71,14 @@ const ProducrCard = ({ groupedByCategory }) => {
   };
 
   return (
-    <div className="flex flex-col gap-10">
-      {groupedByCategory.map(({ cat, items }) =>
+    <div className="flex flex-1 flex-col gap-10">
+      {filterByAll().map(({ cat, items }) =>
         items.length === 0 ? (
           "Product not found"
         ) : (
           <div key={cat}>
-            <div className="flex items-center gap-3 mb-4">
-              <h2 className="text-xl md:text-2xl font-bold text-gray-800">
+            <div className="flex flex-col  items-start pl-2  md:gap-1 mb-4">
+              <h2 className="text-sm md:text-2xl font-bold text-gray-800">
                 {cat}
               </h2>
               <span className="text-sm text-gray-400 font-medium">
@@ -87,7 +87,7 @@ const ProducrCard = ({ groupedByCategory }) => {
               <div className="flex-1 h-px bg-gray-200" />
             </div>
 
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 relative z-10 place-content-center">
               {items.map((product) => {
                 const inCart = cart.find((i) => i._id === product._id);
                 const inWishlist = wishlist.find((i) => i._id === product._id);

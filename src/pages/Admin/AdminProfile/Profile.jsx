@@ -12,13 +12,14 @@ const Profile = () => {
   const [selectedAdmin, setSelectedAdmin] = useState(null);
   const [loading, setLoading] = useState(true);
   const [deleteConfirm, setDeleteConfirm] = useState(null);
+  console.log("Delete :", deleteConfirm);
 
   const fectchAdmin = () => {
     setLoading(true);
-    fetch("http://localhost:5000/api/data")
+    fetch("http://localhost:5000/api/admin/get-users")
       .then((res) => res.json())
       .then((data) => {
-        setAdmins(data);
+        setAdmins(data.users);
         setLoading(false);
       })
       .catch(() => setLoading(false));
@@ -38,11 +39,21 @@ const Profile = () => {
       return;
     }
     try {
-      const res = await fetch(`http://localhost:5000/api/admin/delete/${id}`, {
-        method: "DELETE",
-        headers: { Authorization: `Bearer ${admin.token}` },
-      });
-      const data = await res.json();
+      const res = await fetch(
+        `http://localhost:5000/api/admin/users-delete/${id}`,
+        {
+          method: "DELETE",
+          headers: { Authorization: `Bearer ${admin.token}` },
+        },
+      );
+      let data;
+
+      try {
+        data = await res.json();
+      } catch {
+        data = { message: "An error occurred while deleting the admin." };
+      }
+
       if (res.ok) {
         toast.success("Admin deleted successfully");
         fectchAdmin();
@@ -156,7 +167,7 @@ const Profile = () => {
                 Cancel
               </button>
               <button
-                onClick={() => handleDelete(deleteConfirm._id)}
+                onClick={() => handleDelete(deleteConfirm?._id)}
                 className="flex-1 px-3 py-1.5 bg-red-600 text-white rounded-lg hover:bg-red-700 text-sm"
               >
                 Delete

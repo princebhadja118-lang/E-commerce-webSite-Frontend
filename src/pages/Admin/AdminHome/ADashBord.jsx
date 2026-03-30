@@ -8,33 +8,28 @@ const ADashBord = () => {
   const [users, setUsers] = useState([]);
   const [products, setProducts] = useState([]);
   const [orders, setOrders] = useState([]);
+  const [revenue, setRevenue] = useState(0);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
   useEffect(() => {
     Promise.all([
-      fetch("http://localhost:5000/api/data").then((res) => res.json()),
-      fetch("http://localhost:5000/api/products/get-products").then((res) =>
+      fetch("http://localhost:5000/api/admin/get-users").then((res) =>
         res.json(),
       ),
-      fetch("http://localhost:5000/api/orders/all-orders").then((res) =>
+      fetch("http://localhost:5000/api/admin/products").then((res) =>
         res.json(),
       ),
+      fetch("http://localhost:5000/api/admin/orders").then((res) => res.json()),
     ])
       .then(([usersData, productsData, ordersData]) => {
         setUsers(usersData);
         setProducts(productsData.products);
-        setOrders(ordersData.orders || []);
+        setOrders(ordersData.orders); // ✅ correct
+        setRevenue(ordersData.revenue[0]?.total || 0); // ✅ correct
       })
       .finally(() => setLoading(false));
   }, []);
-
-  const totalUser = users.filter((user) => user.role === "user");
-
-  const totalRevenue = orders.reduce(
-    (acc, order) => acc + (order.totalAmount || 0),
-    0,
-  );
 
   if (loading)
     return (
@@ -49,7 +44,7 @@ const ADashBord = () => {
         <div className="flex gap-3 flex-col border-2 w-full pt-4 pb-0 rounded bg-blue-500 text-white shadow-lg">
           <div className="flex items-center justify-between px-2">
             <p className="text-2xl md:text-4xl font-semibold">
-              {totalUser.length}
+              {users.totalUsers}
             </p>
             <FiUsers size={36} className="opacity-80" />
           </div>
@@ -64,7 +59,7 @@ const ADashBord = () => {
         <div className="flex gap-3 flex-col border-2 w-full pt-4 pb-0 rounded bg-green-500 text-white shadow">
           <div className="flex items-center justify-between px-2">
             <p className="text-2xl md:text-4xl font-semibold">
-              ₹{totalRevenue}
+              ₹{revenue?.toFixed(2)}
             </p>
             <FaIndianRupeeSign size={36} className="opacity-80" />
           </div>

@@ -23,29 +23,45 @@ const ProductCards = ({
   const handleDelete = async (productId) => {
     if (!window.confirm("Delete this product?")) return;
     try {
+      const admin = JSON.parse(localStorage.getItem("user"));
+      if (!admin?.token) {
+        toast.error("Please login first");
+        return;
+      }
       const res = await fetch(
-        `http://localhost:5000/api/products/delete-product/${productId}`,
-        { method: "DELETE" },
+        `http://localhost:5000/api/admin/delete-products/${productId}`,
+        {
+          method: "DELETE",
+          headers: { Authorization: `Bearer ${admin.token}` },
+        },
       );
       if (res.ok) {
         toast.success("Product deleted!");
         refreshProduct();
       } else {
-        toast.error("Failed to delete product.");
+        const err = await res.json();
+        toast.error(err.message || "Failed to delete product.");
       }
-    } catch {
+    } catch (error) {
+      console.error("Delete product error", error);
       toast.error("Failed to delete product.");
     }
   };
 
   const handleEdit = async () => {
     try {
+      const admin = JSON.parse(localStorage.getItem("user"));
+      if (!admin?.token) {
+        toast.error("Please login first");
+        return;
+      }
       const res = await fetch(
-        `http://localhost:5000/api/products/update-product/${form._id}`,
+        `http://localhost:5000/api/admin/update-products/${form._id}`,
         {
           method: "PUT",
           headers: {
             "Content-Type": "application/json",
+            Authorization: `Bearer ${admin.token}`,
           },
           body: JSON.stringify(form),
         },

@@ -27,7 +27,7 @@ const AddAdminForm = ({ setAddAdminForm, fectchAdmin }) => {
 
     try {
       const admin = JSON.parse(localStorage.getItem("user"));
-      const res = await fetch("http://localhost:5000/api/admin/add", {
+      const res = await fetch("http://localhost:5000/api/admin/users", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

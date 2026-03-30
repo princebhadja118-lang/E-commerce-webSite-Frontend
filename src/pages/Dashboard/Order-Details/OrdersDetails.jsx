@@ -4,11 +4,9 @@ import { AuthContext } from "../../../auth/AuthContext";
 import OrderCard from "./OrderCard";
 import DeliveryStatus from "./DeliveryStatus";
 
-const OrdersDetails = ({ setShowOrders }) => {
-  const [orders, setOrders] = useState([]);
+const OrdersDetails = ({ setShowOrders, orders, setLoading, loading }) => {
   const [idProduct, setIdProduct] = useState();
   const [selectedOrder, setSelectedOrder] = useState(false);
-  const [loading, setLoading] = useState(true);
   const { user } = useContext(AuthContext);
 
   const fetchProductById = (id) => {
@@ -19,18 +17,6 @@ const OrdersDetails = ({ setShowOrders }) => {
         setLoading(false);
       });
   };
-
-  const userOrders = () => {
-    fetch(`http://localhost:5000/api/orders/get-orders/${user.id}`)
-      .then((res) => res.json())
-      .then((data) => {
-        setOrders(data.orders);
-      })
-      .catch((err) => console.error(err))
-      .finally(() => setLoading(false));
-  };
-
-  useEffect(() => userOrders(), []);
 
   if (loading) {
     return (

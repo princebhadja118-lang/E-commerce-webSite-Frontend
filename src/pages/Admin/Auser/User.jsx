@@ -23,10 +23,10 @@ const User = () => {
 
   const fetchUsers = () => {
     setLoading(true);
-    fetch("http://localhost:5000/api/data")
+    fetch("http://localhost:5000/api/admin/get-users")
       .then((res) => res.json())
       .then((data) => {
-        setUsers(data);
+        setUsers(data.users);
         setLoading(false);
       })
       .catch(() => setLoading(false));
@@ -47,7 +47,7 @@ const User = () => {
     const admin = JSON.parse(localStorage.getItem("user"));
     try {
       const res = await fetch(
-        `http://localhost:5000/api/admin/delete/${userId}`,
+        `http://localhost:5000/api/admin/users-delete/${userId}`,
         {
           method: "DELETE",
           headers: { Authorization: `Bearer ${admin.token}` },

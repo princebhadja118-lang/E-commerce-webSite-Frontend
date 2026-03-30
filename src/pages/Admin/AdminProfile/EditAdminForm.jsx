@@ -12,7 +12,7 @@ const EditAdminForm = ({ setShowEditForm, selectedAdmin, fectchAdmin }) => {
     const admin = JSON.parse(localStorage.getItem("user"));
     try {
       const res = await fetch(
-        `http://localhost:5000/api/admin/update/${selectedAdmin._id}`,
+        `http://localhost:5000/api/admin/users/${selectedAdmin?._id}`,
         {
           method: "PUT",
           headers: {
