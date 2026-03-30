@@ -11,6 +11,7 @@ import { setWishlist } from "../../redux/wishlistSlice";
 import ShopingCard from "./products/ShopingCard";
 import { FaClipboardList } from "react-icons/fa";
 import { HiOutlineMail } from "react-icons/hi";
+import EditUserProfile from "../../components/EditUserProfile";
 
 const Dashboard = () => {
   const { logout, user } = useContext(AuthContext);
@@ -23,6 +24,7 @@ const Dashboard = () => {
   const [showUserProfile, setShowUserProfile] = useState(false);
   const [totalOrders, setTotalOrders] = useState(0);
   const [loading, setLoading] = useState(true);
+  const [openModel, setOpenModel] = useState(false);
 
   const cart = useSelector((state) => state.cart.cartItems);
   const wishlist = useSelector((state) => state.wishlist.wishlistItems);
@@ -131,7 +133,7 @@ const Dashboard = () => {
               </button>
 
               {/*Order */}
-              <div>
+              <div className="hidden md:block">
                 <button
                   onClick={() => setShowOrders(true)}
                   className="relative cursor-pointer p-2 hover:bg-gray-700 rounded-lg transition"
@@ -143,20 +145,24 @@ const Dashboard = () => {
                 </button>
               </div>
 
+              <div>
+                <p></p>
+              </div>
+
               {/* User*/}
               <div className="flex flex-col gap-1 relative">
                 <button
                   onClick={() => setShowUserProfile(!showUserProfile)}
-                  className="hidden md:flex items-center gap-2 bg-gray-700 hover:bg-gray-600 pr-3 rounded-full transition cursor-pointer"
+                  className=" md:flex items-center gap-2 bg-gray-700 hover:bg-gray-600 md:pr-3 rounded-full transition cursor-pointer"
                 >
                   <div className="w-9 h-9 bg-blue-500 rounded-full flex items-center justify-center text-sm font-bold">
                     {user?.username?.charAt(0).toUpperCase()}
                   </div>
-                  <span className="text-sm font-semibold">
+                  <span className="hidden md:block text-sm font-semibold">
                     {user?.username}
                   </span>
                 </button>
-                <div className="hidden md:block absolute top-full right-0 mt-1">
+                <div className="absolute top-full right-0 mt-1">
                   {showUserProfile && (
                     <div className="bg-gray-700 p-4 flex flex-col items-center justify-center gap-2 w-60">
                       <div className="bg-gray-800/80 backdrop:blur-2xl border border-gray-600 p-2 flex shadow rounded gap-2 w-full">
@@ -173,7 +179,13 @@ const Dashboard = () => {
                       </span>
                       <hr className="w-full text-gray-400 mt-3" />
                       <div className="flex items-center justify-between w-full gap-3 mt-3">
-                        <button className="w-full bg-blue-500 hover:bg-blue-600 text-white font-semibold px-4 py-2 rounded transition cursor-pointer text-sm">
+                        <button
+                          onClick={() => {
+                            setOpenModel(!openModel) ||
+                              setShowUserProfile(false);
+                          }}
+                          className="w-full bg-blue-500 hover:bg-blue-600 text-white font-semibold px-4 py-2 rounded transition cursor-pointer text-sm"
+                        >
                           Edit
                         </button>
                         <button
@@ -216,10 +228,16 @@ const Dashboard = () => {
                 </button>
               ))}
               <button
-                onClick={() => setShowUserProfile(!showUserProfile)}
-                className="text-left py-2 font-semibold text-white border-b border-gray-600"
+                onClick={() => {
+                  setShowOrders(true);
+                  setMenu(false);
+                }}
+                className="relative flex gap-2 text-left py-2 font-semibold text-white border-b border-gray-600"
               >
-                My Orders ({user?.username})
+                <FaClipboardList size={22} /> Order Summary
+                <span className="absolute -top-1 left-3 bg-green-500 text-white text-xs font-bold w-5 h-5 flex items-center justify-center rounded-full">
+                  {totalOrders}
+                </span>
               </button>
               <button
                 onClick={logout}
@@ -247,6 +265,7 @@ const Dashboard = () => {
           />
         )}
       </div>
+      <div>{openModel && <EditUserProfile setOpenModel={setOpenModel} />}</div>
     </>
   );
 };

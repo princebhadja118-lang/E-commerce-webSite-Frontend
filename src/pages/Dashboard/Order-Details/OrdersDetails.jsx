@@ -20,7 +20,7 @@ const OrdersDetails = ({ setShowOrders, orders, setLoading, loading }) => {
 
   if (loading) {
     return (
-      <div className="fixed inset-0 flex justify-center items-center h-screen w-full bg-black/70 z-50">
+      <div className="fixed inset-0 flex justify-center items-center h-screen w-full bg-black z-50">
         <div className="animate-spin rounded-full h-12 w-12 border-4 border-t-transparent border-white " />
       </div>
     );
@@ -29,7 +29,7 @@ const OrdersDetails = ({ setShowOrders, orders, setLoading, loading }) => {
   return (
     <div>
       <div
-        className="fixed inset-0 flex justify-center items-center md:h-full w-full bg-black/70 z-50 p-4"
+        className="fixed inset-0 flex justify-center items-center md:h-full w-full bg-black/70 z-91 p-4"
         onClick={(e) => e.stopPropagation()}
       >
         <div className="w-2xl bg-white p-3 rounded">
