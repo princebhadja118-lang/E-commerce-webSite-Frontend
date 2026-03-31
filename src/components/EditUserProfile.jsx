@@ -2,7 +2,6 @@ import React, { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../auth/AuthContext";
 
 const EditUserProfile = ({ setOpenModel }) => {
-  const [saveUser, setSaveUser] = useState(null);
   const User = JSON.parse(localStorage.getItem("user"));
   const { setUser } = useContext(AuthContext);
   const [formData, setFormData] = useState({
@@ -47,8 +46,6 @@ const EditUserProfile = ({ setOpenModel }) => {
       );
 
       const data = await res.json();
-      console.log(data);
-
       setUser(data.user);
 
       // merge old + new
@@ -58,7 +55,6 @@ const EditUserProfile = ({ setOpenModel }) => {
       };
 
       // safe save
-
       localStorage.setItem("user", JSON.stringify(updatedUser));
       setOpenModel(false);
     } catch (err) {

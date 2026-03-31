@@ -25,8 +25,8 @@ const ADashBord = () => {
       .then(([usersData, productsData, ordersData]) => {
         setUsers(usersData);
         setProducts(productsData.products);
-        setOrders(ordersData.orders); // ✅ correct
-        setRevenue(ordersData.revenue[0]?.total || 0); // ✅ correct
+        setOrders(ordersData.orders);
+        setRevenue(ordersData.revenue);
       })
       .finally(() => setLoading(false));
   }, []);

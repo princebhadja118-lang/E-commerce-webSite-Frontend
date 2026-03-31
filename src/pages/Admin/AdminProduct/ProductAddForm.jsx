@@ -75,69 +75,106 @@ const ProductAddForm = ({ setShowPopup, fetchProduct }) => {
         <div className="bg-white p-3 md:p-6 rounded h-fit w-sm flex flex-col gap-3">
           <div className="flex justify-between items-center">
             <h2 className="text-xl font-bold">Add New Product</h2>
-            <button onClick={() => setShowPopup(false)}>
+            <button
+              onClick={() => setShowPopup(false)}
+              className="cursor-pointer"
+            >
               <IoClose size={25} />
             </button>
           </div>
 
-          <input
-            type="text"
-            placeholder="Title"
-            value={form.title}
-            onChange={(e) => setForm({ ...form, title: e.target.value })}
-            className="border p-2 rounded"
-          />
-          {error.title && <p className="text-red-500">{error.title}</p>}
-          <input
-            type="text"
-            placeholder="Brand"
-            value={form.brand}
-            onChange={(e) => setForm({ ...form, brand: e.target.value })}
-            className="border p-2 rounded"
-          />
-          {error.brand && <p className="text-red-500">{error.brand}</p>}
-          <input
-            type="number"
-            placeholder="Price"
-            value={form.price}
-            onChange={(e) => setForm({ ...form, price: e.target.value })}
-            className="border p-2 rounded"
-          />
-          {error.price && <p className="text-red-500">{error.price}</p>}
-          <input
-            type="number"
-            placeholder="Discount %"
-            value={form.discount}
-            onChange={(e) => setForm({ ...form, discount: e.target.value })}
-            className="border p-2 rounded"
-          />
-
-          <input
-            type="text"
-            placeholder="Image URL"
-            value={form.img}
-            onChange={(e) => setForm({ ...form, img: e.target.value })}
-            className="border p-2 rounded"
-          />
-          {error.img && <p className="text-red-500">{error.img}</p>}
-          <input
-            type="text"
-            placeholder="Category"
-            value={form.category}
-            onChange={(e) =>
-              setForm({ ...form, category: e.target.value.toUpperCase() })
-            }
-            className="border p-2 rounded"
-          />
-          {error.category && <p className="text-red-500">{error.category}</p>}
-          <input
-            type="number"
-            placeholder="Stock Quantity"
-            value={form.stock}
-            onChange={(e) => setForm({ ...form, stock: e.target.value })}
-            className="border p-2 rounded"
-          />
-          {error.stock && <p className="text-red-500">{error.stock}</p>}
+          <div className="h-70 md:h-fit overflow-scroll">
+            <div>
+              <label htmlFor="title">Title : </label>
+              <input
+                type="text"
+                placeholder="Title"
+                id="title"
+                value={form.title}
+                onChange={(e) => setForm({ ...form, title: e.target.value })}
+                className="border p-2 rounded w-full"
+              />
+              {error.title && <p className="text-red-500">{error.title}</p>}
+            </div>
+            <div>
+              <label htmlFor="brand">Brand : </label>
+              <input
+                type="text"
+                placeholder="Brand"
+                id="brand"
+                value={form.brand}
+                onChange={(e) => setForm({ ...form, brand: e.target.value })}
+                className="border p-2 rounded w-full"
+              />
+              {error.brand && <p className="text-red-500">{error.brand}</p>}
+            </div>
+            <div>
+              <label htmlFor="price">Price : </label>
+              <input
+                type="number"
+                placeholder="Price"
+                id="price"
+                value={form.price}
+                onChange={(e) => setForm({ ...form, price: e.target.value })}
+                className="border p-2 rounded w-full"
+              />
+              {error.price && <p className="text-red-500">{error.price}</p>}
+            </div>
+            <div>
+              <label htmlFor="discount">Discount % : </label>
+              <input
+                type="number"
+                placeholder="Discount %"
+                id="discount"
+                value={form.discount}
+                onChange={(e) => setForm({ ...form, discount: e.target.value })}
+                className="border p-2 rounded w-full"
+              />
+              {error.discount && (
+                <p className="text-red-500">{error.discount}</p>
+              )}
+            </div>
+            <div>
+              <label htmlFor="img">Image URL : </label>
+              <input
+                type="text"
+                placeholder="Image URL"
+                id="img"
+                value={form.img}
+                onChange={(e) => setForm({ ...form, img: e.target.value })}
+                className="border p-2 rounded w-full"
+              />
+              {error.img && <p className="text-red-500">{error.img}</p>}
+            </div>
+            <div>
+              <label htmlFor="category">Category : </label>
+              <input
+                type="text"
+                placeholder="Category"
+                id="category"
+                value={form.category}
+                onChange={(e) =>
+                  setForm({ ...form, category: e.target.value.toUpperCase() })
+                }
+                className="border p-2 rounded w-full"
+              />
+              {error.category && (
+                <p className="text-red-500">{error.category}</p>
+              )}
+            </div>
+            <div>
+              <label htmlFor="stock">Stock Quantity : </label>
+              <input
+                type="number"
+                placeholder="Stock Quantity"
+                id="stock"
+                value={form.stock}
+                onChange={(e) => setForm({ ...form, stock: e.target.value })}
+                className="border p-2 rounded w-full"
+              />
+              {error.stock && <p className="text-red-500">{error.stock}</p>}
+            </div>
+          </div>
           <div className="flex gap-3">
             <button
               onClick={handleAddProduct}
