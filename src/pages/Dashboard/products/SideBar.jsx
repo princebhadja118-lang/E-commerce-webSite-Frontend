@@ -3,7 +3,6 @@ import { BsEarbuds } from "react-icons/bs";
 import { MdOutlinePhoneIphone } from "react-icons/md";
 import { IoIosLaptop } from "react-icons/io";
 import { GiCardboardBoxClosed } from "react-icons/gi";
-import { isAction } from "@reduxjs/toolkit";
 import { MdMenuOpen } from "react-icons/md";
 import { RiMenuFold4Fill } from "react-icons/ri";
 
@@ -28,7 +27,7 @@ const SideBar = ({
 
   return (
     <div
-      className={`fixed w-fit md:w-64 h-full bg-gray-800 mt-1 z-20 ${activeMenu ? "block" : "w-20"} md:block`}
+      className={`fixed w-fit md:w-64 h-full md:p-2 bg-gray-900 mt-1 z-20 ${activeMenu ? "block" : "w-20"} md:block`}
     >
       <div className="flex justify-between items-center gap-2 mb-6 p-3 text-white md:hidden w-full">
         <button
@@ -61,7 +60,7 @@ const SideBar = ({
           ))}
         </div>
         <div
-          className={`p-1 md:p-3 ${activeMenu && mobileScreen ? "w-full" : "hidden md:block"} bg-gray-700 rounded shadow-lg m-2`}
+          className={`p-1 md:p-3 ${activeMenu ? "w-fit" : "hidden md:block"} ${!mobileScreen ? "w-full" : ""} bg-gray-700 rounded shadow-lg `}
         >
           <p>Price Range:</p>
           <input
@@ -74,10 +73,10 @@ const SideBar = ({
           />
           <div className="flex justify-between items-center">
             <span>
-              {!mobileScreen ? "Price:" : null}₹{minPrice}{" "}
+              {!mobileScreen ? "Price : " : null}₹{minPrice}{" "}
             </span>
             <span>
-              {!mobileScreen ? "Price:" : null}₹{maxPrice}{" "}
+              {!mobileScreen ? "Price : " : null}₹{maxPrice}{" "}
             </span>
           </div>
         </div>

@@ -158,10 +158,10 @@ const ProductCards = ({
           <div>
             {showEditForm && (
               <div
-                className="fixed inset-0 bg-black/70 flex items-center justify-center p-5 z-60 "
+                className="fixed inset-0 bg-black/70 flex items-center justify-center p-5 "
                 onClick={(e) => e.stopPropagation()}
               >
-                <div className="bg-white p-3 md:p-6 rounded w-sm flex flex-col gap-1">
+                <div className="bg-white p-3 md:p-6 rounded w-sm flex flex-col gap-3">
                   <div className="flex justify-between items-center">
                     <h2 className="text-xl font-bold">Edit Product</h2>
                     <button
@@ -172,100 +172,69 @@ const ProductCards = ({
                     </button>
                   </div>
 
-                  <div className="h-70 md:h-fit overflow-scroll">
-                    <div>
-                      <label htmlFor="title">Title : </label>
-                      <input
-                        type="text"
-                        id="title"
-                        placeholder="Title"
-                        value={form.title}
-                        onChange={(e) =>
-                          setForm({ ...form, title: e.target.value })
-                        }
-                        className="border p-2 rounded w-full"
-                      />
-                    </div>
-                    <div>
-                      <label htmlFor="brand">Brand : </label>
-                      <input
-                        type="text"
-                        id="brand"
-                        placeholder="Brand"
-                        value={form.brand}
-                        onChange={(e) =>
-                          setForm({ ...form, brand: e.target.value })
-                        }
-                        className="border p-2 rounded w-full"
-                      />
-                    </div>
-                    <div>
-                      <label htmlFor="price">Price : </label>
-                      <input
-                        type="number"
-                        id="price"
-                        placeholder="Price"
-                        value={form.price}
-                        onChange={(e) =>
-                          setForm({ ...form, price: e.target.value })
-                        }
-                        className="border p-2 rounded w-full"
-                      />
-                    </div>
-                    <div>
-                      <label htmlFor="discount">Discount % : </label>
-                      <input
-                        type="number"
-                        id="discount"
-                        placeholder="Discount %"
-                        value={form.discount}
-                        onChange={(e) =>
-                          setForm({ ...form, discount: e.target.value })
-                        }
-                        className="border p-2 rounded w-full"
-                      />
-                    </div>
-                    <div>
-                      <label htmlFor="img">Image URL : </label>
-                      <input
-                        type="text"
-                        id="img"
-                        placeholder="Image URL"
-                        value={form.img}
-                        onChange={(e) =>
-                          setForm({ ...form, img: e.target.value })
-                        }
-                        className="border p-2 rounded w-full"
-                      />
-                    </div>
-                    <div>
-                      <label htmlFor="category">Category : </label>
-                      <input
-                        type="text"
-                        id="category"
-                        placeholder="Category"
-                        value={form.category}
-                        onChange={(e) =>
-                          setForm({ ...form, category: e.target.value })
-                        }
-                        className="border p-2 rounded w-full"
-                      />
-                    </div>
-                    <div>
-                      <label htmlFor="stock">Stock Quantity : </label>
-                      <input
-                        type="number"
-                        id="stock"
-                        placeholder="Stock Quantity"
-                        value={form.stock ?? ""}
-                        onChange={(e) =>
-                          setForm({ ...form, stock: e.target.value })
-                        }
-                        className="border p-2 rounded w-full"
-                      />
-                    </div>
-                  </div>
-                  <div className="flex gap-3 pt-3">
+                  <input
+                    type="text"
+                    placeholder="Title"
+                    value={form.title}
+                    onChange={(e) =>
+                      setForm({ ...form, title: e.target.value })
+                    }
+                    className="border p-2 rounded"
+                  />
+                  <input
+                    type="text"
+                    placeholder="Brand"
+                    value={form.brand}
+                    onChange={(e) =>
+                      setForm({ ...form, brand: e.target.value })
+                    }
+                    className="border p-2 rounded"
+                  />
+                  <input
+                    type="number"
+                    placeholder="Price"
+                    value={form.price}
+                    onChange={(e) =>
+                      setForm({ ...form, price: e.target.value })
+                    }
+                    className="border p-2 rounded"
+                  />
+                  <input
+                    type="number"
+                    placeholder="Discount %"
+                    value={form.discount}
+                    onChange={(e) =>
+                      setForm({ ...form, discount: e.target.value })
+                    }
+                    className="border p-2 rounded"
+                  />
+
+                  <input
+                    type="text"
+                    placeholder="Image URL"
+                    value={form.img}
+                    onChange={(e) => setForm({ ...form, img: e.target.value })}
+                    className="border p-2 rounded"
+                  />
+                  <input
+                    type="text"
+                    placeholder="Category"
+                    value={form.category}
+                    onChange={(e) =>
+                      setForm({ ...form, category: e.target.value })
+                    }
+                    className="border p-2 rounded"
+                  />
+                  <input
+                    type="number"
+                    placeholder="Stock Quantity"
+                    value={form.stock ?? ""}
+                    onChange={(e) =>
+                      setForm({ ...form, stock: e.target.value })
+                    }
+                    className="border p-2 rounded"
+                  />
+                  <div className="flex gap-3">
                     <button
                       onClick={handleEdit}
                       className="bg-green-600 text-white px-4 py-2 rounded w-full cursor-pointer"
