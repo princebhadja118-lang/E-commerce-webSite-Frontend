@@ -2,6 +2,7 @@ import React, { useContext } from "react";
 import { AuthContext } from "../../auth/AuthContext";
 import { Outlet } from "react-router-dom";
 import Logo from "../../components/Logo";
+import AdminSidebar from "./AdminSidebar";
 
 const Admin = () => {
   const { user, logout } = useContext(AuthContext);
@@ -32,6 +33,7 @@ const Admin = () => {
             </div>
           </nav>
           <div className="flex">
+            <AdminSidebar />
             <main className="w-full h-screen bg-gray-100 p-1 md:p-4 overflow-x-scroll flex-1">
               <Outlet />
             </main>

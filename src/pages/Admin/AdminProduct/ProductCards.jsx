@@ -158,7 +158,7 @@ const ProductCards = ({
           <div>
             {showEditForm && (
               <div
-                className="fixed inset-0 bg-black/70 flex items-center justify-center p-5 "
+                className="fixed inset-0 bg-black/70 flex items-center justify-center p-5 z-60 "
                 onClick={(e) => e.stopPropagation()}
               >
                 <div className="bg-white p-3 md:p-6 rounded w-sm flex flex-col gap-1">
